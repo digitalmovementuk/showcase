@@ -803,7 +803,8 @@ footer .wrap{ display:block; }
   }
   .sw-media::after{ content:""; position:absolute; inset:6px; border-radius:46px; background:#0a0a0c; z-index:0; }   /* black bezel ring */
   .sw-media::before{ content:""; position:absolute; top:20px; left:50%; transform:translateX(-50%); width:31%; height:22px; background:#000; border-radius:13px; z-index:3; }   /* Dynamic Island */
-  .sw-media iframe{ position:absolute; inset:10px; top:10px; left:10px; width:auto; height:auto; border-radius:42px; background:#000; z-index:1; }
+  /* iframe must fill the iPhone screen — explicit size (width:auto on a replaced iframe falls back to 300x150) */
+  .sw-media iframe{ position:absolute; inset:auto; top:10px; left:10px; right:auto; bottom:auto; width:calc(100% - 20px); height:calc(100% - 20px); border-radius:42px; background:#000; z-index:1; }
   .sw-skel{ inset:10px; border-radius:42px; z-index:1; }
   .sw-hint{ display:none; }
   .sw-foot{ justify-content:center; padding:11px 0 0; }
