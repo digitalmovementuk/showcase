@@ -892,8 +892,7 @@ footer .wrap{ display:block; }
 .sw-section.revealed .sw-filterwrap, .sw-section.revealed .sw-stagehead, .sw-section.revealed .sw-track{ opacity:1; }
 /* strong scroll lock + the whole showroom fits ONE desktop viewport (iframes sized to fit) */
 @media (min-width:761px){
-  html{ scroll-snap-type:y mandatory; }
-  .hero, footer{ scroll-snap-align:start; }
+  html{ scroll-snap-type:y proximity; }   /* catches a casual scroll into the showroom without trapping the page */
   .sw-section{
     scroll-snap-align:start; scroll-snap-stop:always;
     height:100svh; min-height:600px; padding-block:0; overflow:hidden;
@@ -1492,12 +1491,27 @@ footer .wrap{ display:block; }
       f.classList.add('loaded'); media.classList.add('loaded'); fitFrame(f);
       /* same-origin previews: strip cookie/consent popups so the hero shows clean (live client sites untouched) */
       try{
-        var d=f.contentDocument;
+        var d=f.contentDocument, src=media.getAttribute('data-src')||'';
         if(d && d.head){
-          var sel='.consent-root,.consent-backdrop,.cookie-banner,.cookie-consent,#cookie-consent,#cookieConsent,.cc-window,.cmplz-cookiebanner,[class*="cookie-banner"],[id*="cookie-consent"]';
-          var css=sel+'{display:none!important;visibility:hidden!important;}';
-          if(d.querySelector(sel)) css+='html,body{overflow:auto!important;}';
-          var st=d.createElement('style'); st.textContent=css; d.head.appendChild(st);
+          var sel='.consent-root,.consent-backdrop,.cookie-banner,.cookie-consent,#cookie-consent,#cookieConsent,.cc-window,.cmplz-cookiebanner,.cookie-notice,#cookie-notice,.moove-gdpr-info-bar-container,.cli-modal,[class*="cookie-banner"],[id*="cookie-consent"]';
+          var st=d.createElement('style'); st.textContent=sel+'{display:none!important;visibility:hidden!important;}'; d.head.appendChild(st);
+          /* robustly remove any fixed cookie/privacy popup by content (same-origin previews) */
+          var killPopups=function(){
+            try{
+              var els=d.querySelectorAll('div,section,aside,dialog');
+              for(var i=0;i<els.length;i++){ var el=els[i], cs=d.defaultView.getComputedStyle(el);
+                if((cs.position==='fixed'||cs.position==='sticky') && /cookie|consent|gdpr|datenschutz|privacy preferenc|we use cookies|your privacy/i.test(el.textContent||'') && (el.textContent||'').length<700){
+                  var r=el.getBoundingClientRect(); if(r.width>120 && r.height>36){ el.style.setProperty('display','none','important'); }
+                }
+              }
+              d.documentElement.style.overflow='auto'; if(d.body) d.body.style.overflow='auto';
+            }catch(_){}
+          };
+          killPopups(); setTimeout(killPopups,800); setTimeout(killPopups,2400);
+          /* AEXIS: keep the preview on the landing page — disable navigation away via menu links */
+          if(src.indexOf('aexis')>-1){
+            d.addEventListener('click', function(e){ var a=e.target.closest&&e.target.closest('a'); if(a){ var h=a.getAttribute('href')||''; if(h && h.charAt(0)!=='#'){ e.preventDefault(); e.stopPropagation(); } } }, true);
+          }
         }
       }catch(e){/* cross-origin frame — nothing to clean */}
     });
