@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Selected Work — Digital Movement</title>
+<meta name="description" content="A live look at websites we've built. Every frame is the real, working site — animating as it loads. Filter by industry to find work like yours." />
+<link rel="icon" type="image/svg+xml" href="assets/brand/logo-color-positive.svg" />
+<meta name="theme-color" content="#FFFFFF" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Selected Work — Digital Movement" />
+<meta property="og:description" content="A live look at websites we've built. Every frame is the real, working site — animating as it loads. Filter by industry." />
+<meta property="og:image" content="https://digitalmovementuk.github.io/showcase/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://digitalmovementuk.github.io/showcase/" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   DIGITAL MOVEMENT — Maison
+   A luxury, monochrome design system.
+   Canvas: warm ivory · Ink: warm near-black · Accent: champagne (whisper)
+   Display: Jost (geometric, Futura-lineage) · Body: Inter
+   ============================================================ */
+
+:root{
+  --bone:        #FFFFFF;   /* page canvas — clean white */
+  --bone-2:      #F4F4F5;   /* recessed panel — light neutral */
+  --paper:       #FFFFFF;   /* raised surface */
+  --ink:         #111113;   /* near-black, neutral */
+  --ink-soft:    #565659;   /* secondary text */
+  --ink-faint:   #98989C;   /* labels, meta */
+  --line:        rgba(17,17,19,0.12);
+  --line-soft:   rgba(17,17,19,0.06);
+  --gold:        #9A2FC6;   /* DM brand violet — whisper accent only */
+  --gold-2:      #EC178D;   /* DM brand magenta */
+  --gold-tint:   rgba(154,47,198,0.14);
+  --red:         #FF3B30;   /* map project dots */
+
+  --ease:        cubic-bezier(0.16, 1, 0.3, 1);
+  --mat:         clamp(10px, 1.4vw, 22px);  /* gallery-mat inset */
+  --gutter:      clamp(22px, 6vw, 96px);
+  --maxw:        1320px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body{
+  background:var(--bone);
+  color:var(--ink);
+  font-family:"Inter", -apple-system, system-ui, sans-serif;
+  font-size:16px; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+::selection{ background:var(--ink); color:var(--bone); }
+img{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+
+/* ---- Display type ---- */
+.disp{ font-family:"Jost", sans-serif; font-weight:300; letter-spacing:-0.005em; line-height:1.0; }
+.label{
+  font-family:"Jost", sans-serif; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.28em;
+  font-size:11px; color:var(--ink-faint);
+}
+.label--ink{ color:var(--ink); }
+
+/* gold rule used beside labels */
+.rule-gold{ display:inline-block; width:34px; height:1px; background:linear-gradient(90deg,#F05F22,#EC178D,#9A2FC6); vertical-align:middle; margin-right:14px; }
+
+/* ---- Layout ---- */
+.wrap{ width:100%; max-width:var(--maxw); margin:0 auto; padding-inline:var(--gutter); }
+section{ position:relative; }
+
+/* ---- Gallery-mat frame: a thin hairline insetting the whole page ---- */
+/* hidden over the cinematic hero; fades in once the page is scrolled */
+.frame{ position:fixed; inset:var(--mat); border:1px solid var(--line); pointer-events:none; z-index:60;
+  opacity:0; transition:opacity .6s var(--ease); }
+body.scrolled .frame{ opacity:1; }
+.frame::after{ /* faint corner ticks */
+  content:""; position:absolute; inset:0;
+}
+
+/* ---- Scroll progress (champagne hairline) ---- */
+.progress{ position:fixed; top:0; left:0; height:2px; width:0;
+  background:linear-gradient(90deg,var(--gold),var(--gold-2)); z-index:70; transition:width .1s linear; }
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav{
+  position:fixed; top:var(--mat); left:var(--mat); right:var(--mat);
+  z-index:55; display:flex; align-items:center; justify-content:space-between;
+  padding:22px clamp(18px,3.4vw,46px);
+  transition:background .6s var(--ease), box-shadow .6s var(--ease), padding .5s var(--ease);
+}
+.nav.scrolled{
+  background:rgba(243,239,232,0.82);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  box-shadow:0 1px 0 var(--line-soft);
+  padding-top:16px; padding-bottom:16px;
+}
+.wordmark{
+  font-family:"Jost", sans-serif; font-weight:400; font-size:15px;
+  text-transform:uppercase; letter-spacing:0.34em; color:var(--ink);
+  display:inline-flex; align-items:center; gap:13px; white-space:nowrap;
+}
+.wordmark .lozenge{ width:9px; height:9px; border:1px solid var(--ink); transform:rotate(45deg); display:inline-block; }
+.brandlogo{ height:23px; width:auto; display:block; }
+.nav.scrolled .brandlogo{ height:21px; }
+.nav-links{ display:flex; align-items:center; gap:clamp(20px,2.6vw,40px); opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .55s var(--ease), transform .55s var(--ease); }
+.nav.scrolled .nav-links{ opacity:1; transform:none; pointer-events:auto; }
+.nav-links a{
+  font-family:"Jost", sans-serif; font-weight:400; font-size:12.5px;
+  text-transform:uppercase; letter-spacing:0.16em; color:var(--ink-soft);
+  position:relative; padding-bottom:3px; transition:color .4s var(--ease);
+}
+.nav-links a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold); transition:width .5s var(--ease); }
+.nav-links a:hover{ color:var(--ink); }
+.nav-links a:hover::after{ width:100%; }
+.nav-cta{
+  font-family:"Jost", sans-serif; font-weight:500; font-size:12px;
+  text-transform:uppercase; letter-spacing:0.16em; color:var(--ink);
+  border:1px solid var(--ink); border-radius:999px; padding:11px 22px;
+  display:inline-flex; align-items:center; gap:9px;
+  transition:background .45s var(--ease), color .45s var(--ease);
+}
+.nav-cta:hover{ background:var(--ink); color:var(--bone); }
+.nav-cta .arr{ transition:transform .45s var(--ease); }
+.nav-cta:hover .arr{ transform:translateX(3px); }
+/* right-side controls: LinkedIn left of the hamburger, vertically aligned (all breakpoints) */
+.nav-controls{ display:flex; align-items:center; gap:clamp(16px,1.8vw,24px); margin-left:auto; }
+.burger{ display:block; width:28px; height:16px; position:relative; cursor:pointer; background:none; border:0; padding:0; }
+.burger span{ position:absolute; left:0; right:0; height:1px; background:var(--ink); transition:transform .4s var(--ease), opacity .3s; }
+.burger span:nth-child(1){ top:2px; } .burger span:nth-child(2){ top:50%; } .burger span:nth-child(3){ bottom:2px; }
+.nav.open .burger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.nav.open .burger span:nth-child(2){ opacity:0; }
+.nav.open .burger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* mobile drawer */
+.drawer{
+  position:fixed; inset:var(--mat); z-index:54; background:var(--bone);
+  display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px;
+  opacity:0; pointer-events:none; transition:opacity .5s var(--ease);
+}
+.drawer.show{ opacity:1; pointer-events:auto; }
+.drawer a{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(30px,9vw,52px); letter-spacing:-0.01em; padding:8px 0; }
+.drawer .label{ margin-top:24px; }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  position:relative; overflow:hidden; background:#0a0c10;
+  min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding-top:140px; padding-bottom:64px;
+}
+/* full-bleed London-skyline clip — blends in as the sign-post clip blends out.
+   poster set as a background so the reveal is never a black frame */
+/* clip 2 comes to full opacity quickly behind the (still-opaque) intro, so clip 1 then
+   dissolves over a bright, stable clip 2 — no muddy half-opacity mid-transition */
+.hero-bg{ position:absolute; inset:0; z-index:0; opacity:0; transition:opacity 0.6s var(--ease);
+  background:#0a0c10 url("assets/hero/cunos-hero-poster.jpg") center/cover no-repeat; }
+.hero-bg.in{ opacity:1; }
+.hero-slides{ position:absolute; inset:0; }
+.hero-slide{ position:absolute; inset:0; opacity:0; transition:opacity 1.1s var(--ease); }
+.hero-slide.is-active{ opacity:1; }
+.hero-slide__video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.hero-bg__scrim{ position:absolute; inset:0; z-index:2;
+  background:linear-gradient(180deg, rgba(8,10,14,0.46) 0%, rgba(8,10,14,0.20) 30%, rgba(8,10,14,0.26) 64%, rgba(8,10,14,0.66) 100%); }
+.hero .wrap{ position:relative; z-index:2; }
+/* in the cinematic video hero the H1 is the only headline — the secondary
+   content stays in the DOM but is not shown over the clip.
+   (#top id-specificity so it wins over the original display/animation rules) */
+#top .eyebrow, #top .lead, #top .hero-actions, #top .hero-locations{ display:none; }
+/* subtle trust row — Google review + Digital Reference award badge, blends in with the carousel */
+.hero-trust{ margin-top:26px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:11px 20px;
+  max-width:min(760px,86vw); opacity:0; transition:opacity 1s var(--ease); }
+.hero-trust.in{ opacity:1; }
+.hero .hero-google{ margin-top:0; opacity:1; animation:none; color:rgba(255,255,255,0.82); text-shadow:0 1px 14px rgba(0,0,0,0.55); }
+.hero .hero-google:hover{ color:#fff; }
+.hero .hero-google .g-stars{ color:#F5B544; }
+.hero-trust__div{ display:none; }
+
+/* vertical award ribbon — hangs from the top-left of the hero, dark glass + swallowtail */
+.hero-ribbon{
+  position:absolute; top:0; left:clamp(16px,3vw,52px); z-index:6;
+  width:98px; padding:15px 11px 24px;
+  display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; color:#fff;
+  /* woven fabric base — opaque cloth on entrance, then frosts to glass (see .glassy) */
+  background-color:#17141d;
+  -webkit-backdrop-filter:blur(0px); backdrop-filter:blur(0px);
+  border:1px solid rgba(255,255,255,0.14); border-top:none;
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - 13px), 50% 100%, 0 calc(100% - 13px));
+  box-shadow:0 22px 46px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.08);
+  transition:background-color 1.1s var(--ease), -webkit-backdrop-filter 1.1s var(--ease), backdrop-filter 1.1s var(--ease), box-shadow 1.1s var(--ease);
+  transform-origin:top center; transform:none;
+  opacity:0; will-change:transform, opacity, clip-path;
+}
+/* woven fabric texture — top-light + drape folds + cross-weave threads + fibre grain;
+   sits below the text, fades out when the banner frosts to glass */
+.hero-ribbon::after{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:1;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 20%, rgba(0,0,0,0.24) 100%),
+    linear-gradient(90deg, rgba(0,0,0,0.20) 0%, rgba(255,255,255,0.06) 13%, rgba(0,0,0,0.14) 30%, rgba(255,255,255,0.045) 50%, rgba(0,0,0,0.14) 70%, rgba(255,255,255,0.06) 87%, rgba(0,0,0,0.20) 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.045) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23f)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size:auto, auto, auto, auto, 130px 130px;
+  background-blend-mode:normal, normal, normal, normal, soft-light;
+  transition:opacity 1.1s var(--ease);
+}
+/* settled state: frosted glass — slight opacity so the video shows through (premium, refined) */
+.hero-ribbon.glassy{
+  background-color:rgba(22,19,28,0.46);
+  -webkit-backdrop-filter:blur(16px) saturate(125%); backdrop-filter:blur(16px) saturate(125%);
+  box-shadow:0 22px 46px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.hero-ribbon.glassy::after{ opacity:0; }
+
+/* banner drop: unrolls downward from its top pole, then sways and settles like cloth */
+.hero-ribbon.in{ opacity:1; animation:bannerDrop 1.5s forwards; }
+
+@keyframes bannerDrop{
+  0%   { transform:rotate(0deg); clip-path:polygon(0 0, 100% 0, 100% 0, 50% 0, 0 0);
+         animation-timing-function:cubic-bezier(0.45,0,0.85,0.5); }                                   /* accelerate — drops under weight */
+  55%  { transform:rotate(0deg); clip-path:polygon(0 0, 100% 0, 100% calc(100% - 13px), 50% 100%, 0 calc(100% - 13px));
+         animation-timing-function:cubic-bezier(0.3,0.7,0.25,1); }                                    /* reaches full length, then settles */
+  68%  { transform:rotate(1.6deg); }    /* pendulum sway from the top pole */
+  81%  { transform:rotate(-1deg); }
+  91%  { transform:rotate(0.45deg); }
+  100% { transform:rotate(0deg); clip-path:polygon(0 0, 100% 0, 100% calc(100% - 13px), 50% 100%, 0 calc(100% - 13px)); }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-ribbon{ transform:none; opacity:1; }
+}
+.hero-ribbon::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#F05F22,#EC178D,#9A2FC6); }
+.hero-ribbon__medal{ width:21px; height:21px; opacity:.95; margin-top:5px; }
+.hero-ribbon__brand{ font-family:"Jost",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.16em; font-size:9.5px; line-height:1.35; }
+.hero-ribbon__rule{ width:26px; height:1px; background:rgba(255,255,255,0.32); }
+.hero-ribbon__tag{ font-family:"Jost",sans-serif; font-weight:500; text-transform:uppercase; letter-spacing:0.18em; font-size:8px; color:rgba(255,255,255,0.62); }
+.hero-ribbon__title{ font-family:"Jost",sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.12em; font-size:8.5px; line-height:1.55; color:rgba(255,255,255,0.92); }
+.hero-ribbon__stars{ color:#F5B544; font-size:10px; letter-spacing:1px; }
+.hero-ribbon__year{ font-family:"Jost",sans-serif; font-weight:500; letter-spacing:0.16em; font-size:11px; padding:3px 9px; border:1px solid rgba(255,255,255,0.30); border-radius:2px; margin-top:1px; }
+@media(max-width:760px){ .hero-ribbon{ width:82px; left:9px; padding:12px 9px 20px; gap:7px; } .hero-ribbon__title{ font-size:8px; } }
+
+/* office slider — centre-bottom, Husband-style (wide-tracked label + dash dots) */
+.hero-locslider{
+  position:absolute; left:0; right:0; bottom:clamp(34px,6vh,62px); z-index:3;
+  display:flex; flex-direction:column; align-items:center; gap:13px;
+  opacity:0; transform:translateY(10px); pointer-events:none;
+  transition:opacity 1s var(--ease), transform 1s var(--ease);
+}
+.hero-locslider.in{ opacity:1; transform:none; pointer-events:auto; }
+.hero-locslider__track{ position:relative; width:100%; min-width:280px; height:96px; }
+.hero-locslider__item{
+  position:absolute; inset:0; margin:auto;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px;
+  opacity:0; transition:opacity .7s var(--ease); text-align:center; pointer-events:none;
+}
+.hero-locslider__item.is-active{ opacity:1; pointer-events:auto; }
+.hero-locslider__item .loc-name{
+  font-family:"Jost",sans-serif; font-weight:500; text-transform:uppercase;
+  letter-spacing:0.26em; font-size:12.5px; color:#fff; white-space:nowrap;
+  text-shadow:0 1px 16px rgba(0,0,0,0.6);
+}
+.hero-locslider__item .loc-addr{
+  font-family:"Roboto",sans-serif; font-weight:400; letter-spacing:0.02em;
+  font-size:11.5px; color:rgba(255,255,255,0.80); white-space:nowrap;
+  text-shadow:0 1px 14px rgba(0,0,0,0.55);
+}
+.hero-locslider__item .loc-contact{
+  font-family:"Roboto",sans-serif; font-weight:400; letter-spacing:0.015em;
+  font-size:11px; color:rgba(255,255,255,0.66); white-space:nowrap;
+  text-shadow:0 1px 14px rgba(0,0,0,0.55);
+}
+.hero-locslider__item .loc-web{
+  font-family:"Roboto",sans-serif; font-weight:400; letter-spacing:0.05em;
+  font-size:10.5px; color:rgba(255,255,255,0.58); white-space:nowrap;
+  text-shadow:0 1px 14px rgba(0,0,0,0.55);
+}
+.hero-locslider a{ color:inherit; text-decoration:none; border-bottom:1px solid transparent; transition:color .3s var(--ease), border-color .3s var(--ease); }
+.hero-locslider a:hover{ color:#fff; border-color:rgba(255,255,255,0.5); }
+.hero-locslider__dots{ display:flex; gap:10px; justify-content:center; }
+.hero-locslider__dots button{
+  width:26px; height:2px; padding:0; border:0; cursor:pointer;
+  background:rgba(255,255,255,0.42); transition:background .4s var(--ease);
+}
+.hero-locslider__dots button.is-active{ background:#fff; }
+
+/* nav contrast while it sits over the dark video hero (top, not scrolled) */
+.brandlogo--pos{ display:none; }
+.brandlogo--neg{ display:block; }
+.nav.scrolled .brandlogo--pos{ display:block; }
+.nav.scrolled .brandlogo--neg{ display:none; }
+.nav:not(.scrolled) .nav-cta{ color:#fff; border-color:rgba(255,255,255,0.62); }
+.nav:not(.scrolled) .nav-cta:hover{ background:#fff; color:var(--ink); }
+.nav:not(.scrolled) .burger span{ background:#fff; }
+
+/* brand mark stays centred in both states (large over the hero, compact in the sticky bar) */
+.nav .wordmark{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); }
+.nav:not(.scrolled) .brandlogo{ height:clamp(40px,4.8vw,54px); }
+.nav.scrolled .brandlogo{ height:27px; }
+
+/* LinkedIn — sleek, transparent (white over the hero, ink once scrolled) */
+.nav-social{ display:inline-flex; align-items:center; justify-content:center; color:var(--ink); opacity:.8;
+  transition:opacity .35s var(--ease), color .45s var(--ease); }
+.nav-social svg{ width:19px; height:19px; display:block; }
+.nav-social:hover{ opacity:1; }
+.nav:not(.scrolled) .nav-social{ color:#fff; }
+
+/* menu open: the drawer is white — switch to the dark logo + ink icons to avoid white-on-white */
+.nav.open .brandlogo--neg{ display:none; }
+.nav.open .brandlogo--pos{ display:block; }
+.nav.open .nav-social{ color:var(--ink); }
+.nav.open .burger span{ background:var(--ink); }
+.hero .eyebrow{ margin-bottom:30px; opacity:0; animation:rise 1.2s var(--ease) .15s forwards; }
+.hero h1{
+  font-size:clamp(38px, 6.6vw, 100px); font-weight:300; line-height:1.04;
+  letter-spacing:-0.015em; max-width:15ch;
+}
+.hero h1 .line{ display:block; overflow:visible; padding-bottom:0.06em; }
+.hero h1 .line > span{ display:block; transform:translateY(115%); }
+.hero.in h1 .line:nth-child(1) > span{ animation:linerise 1.25s var(--ease) .25s forwards; }
+.hero.in h1 .line:nth-child(2) > span{ animation:linerise 1.25s var(--ease) .37s forwards; }
+.hero.in h1 .line:nth-child(3) > span{ animation:linerise 1.25s var(--ease) .49s forwards; }
+.hero .em{ font-style:italic; font-weight:300; }
+.hero .lead{
+  margin-top:30px; max-width:42ch; font-size:clamp(14.5px,1.2vw,17px);
+  color:var(--ink-soft); line-height:1.7; opacity:0; animation:rise 1.2s var(--ease) .7s forwards;
+}
+.hero-actions{ margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:18px; opacity:0; animation:rise 1.2s var(--ease) .9s forwards; }
+
+/* inline "private audit" enquiry field — satisfies the form-in-hero rule, elegantly */
+.audit-form{ display:flex; align-items:center; gap:0; border-bottom:1px solid var(--line); padding-bottom:11px; min-width:min(340px,76vw); transition:border-color .5s var(--ease); }
+.audit-form:focus-within{ border-color:var(--ink); }
+.audit-form input{
+  flex:1; border:0; background:transparent; outline:none; color:var(--ink);
+  font-family:"Inter",sans-serif; font-size:14.5px; letter-spacing:0.01em;
+}
+.audit-form input::placeholder{ color:var(--ink-faint); }
+.audit-form button{
+  border:0; background:transparent; cursor:pointer; color:var(--ink-soft);
+  font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:11.5px;
+  display:inline-flex; align-items:center; gap:9px; padding:2px 0 2px 18px; transition:color .4s var(--ease);
+}
+.audit-form button:hover{ color:var(--ink); }
+.audit-form button .arr{ transition:transform .45s var(--ease); }
+.audit-form button:hover .arr{ transform:translateX(4px); }
+.audit-note{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.24em; font-size:10.5px; color:var(--ink-faint); }
+.hero-locations{ margin-top:44px; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px 16px;
+  font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.22em; font-size:10.5px; color:var(--ink-faint);
+  opacity:0; animation:rise 1.2s var(--ease) 1.05s forwards; }
+.hero-locations i{ color:var(--gold); font-style:normal; }
+.hero-google{ margin-top:24px; display:inline-flex; align-items:center; gap:9px; opacity:0; animation:rise 1.2s var(--ease) .8s forwards;
+  font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:10.5px; color:var(--ink-soft); transition:color .4s var(--ease); }
+.hero-google:hover{ color:var(--ink); }
+.hero-google .g-stars{ color:#F5A623; letter-spacing:1.5px; font-size:11px; }
+.audit-ok{ color:var(--gold); font-size:13px; letter-spacing:0.04em; }
+.ghost-link{
+  font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:12px; color:var(--ink-soft);
+  display:inline-flex; align-items:center; gap:9px; padding-bottom:3px; border-bottom:1px solid transparent; transition:color .4s var(--ease), border-color .4s var(--ease);
+}
+.ghost-link:hover{ color:var(--ink); border-color:var(--gold); }
+
+/* trust line in hero */
+.trust{ margin-top:auto; padding-top:54px; width:100%; opacity:0; animation:rise 1.2s var(--ease) 1.1s forwards; }
+.trust .label{ display:block; margin-bottom:18px; }
+.trust ul{ list-style:none; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:clamp(18px,3vw,46px); }
+.trust li{ font-family:"Jost",sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.2em; font-size:12.5px; color:var(--ink-soft); }
+.trust .dot{ color:var(--gold); }
+
+/* =========================================================
+   INTRO — sign-post brand reveal (plays once on every load)
+   3s clip with a slow push-in onto the post · the H1 blends in
+   at 2s over the still-playing clip · the clip then blends out
+   while the H1 stays exactly in place.
+   ========================================================= */
+.intro{
+  position:fixed; inset:0; z-index:9990;
+  background:#0c0c0e;            /* neutral ink while the clip loads */
+  overflow:hidden;
+  opacity:1; transition:opacity 1.7s cubic-bezier(0.4, 0, 0.2, 1);   /* smooth, even dissolve of clip 1 */
+  will-change:opacity;
+}
+.intro__video{
+  position:absolute; inset:0; z-index:0;
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+  transform:scale(1.04); transform-origin:center center;
+  animation:introZoom 5s linear forwards;   /* slow, constant push-in — smooth motion through the full 2s hold */
+}
+@keyframes introZoom{ from{ transform:scale(1.04); } to{ transform:scale(1.19); } }
+/* legibility scrim — fades in with the headline */
+.intro::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg, rgba(8,8,10,0.30) 0%, rgba(8,8,10,0.32) 45%, rgba(8,8,10,0.55) 100%);
+  opacity:0; transition:opacity 1s var(--ease);
+}
+body.titling .intro::before{ opacity:1; }
+/* whisper vignette so the frame feels intentional */
+.intro::after{
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,0.34) 100%);
+}
+.intro.done{ opacity:0; pointer-events:none; }
+.intro.gone{ display:none; }
+
+/* the hero H1 is staged ABOVE the clip: blends in white, then settles to ink */
+.hero h1.intro-stage{
+  position:relative; z-index:9995;
+  color:#fff;
+  text-shadow:none;
+  opacity:0; transition:opacity .95s var(--ease), color 1.05s var(--ease);
+}
+.hero h1.intro-stage .line > span{ transform:none; }            /* sit in place — fade, don't slide */
+.hero h1.intro-stage.show{ opacity:1; }                          /* blend in over the clip (t≈2s) */
+.hero h1.intro-stage.settle{ color:var(--ink); text-shadow:none; } /* clip leaves, H1 stays (t≈3s) */
+.hero h1.intro-stage.rest{ position:static; z-index:auto; }       /* release stacking once clip is gone */
+
+/* while the curtain is up: freeze the page + hold the rest of the hero
+   so it animates in fresh the moment the clip blends out */
+body.intro-lock{ overflow:hidden; }
+body.intro-lock .hero .eyebrow,
+body.intro-lock .hero .lead,
+body.intro-lock .hero-actions,
+body.intro-lock .hero-google,
+body.intro-lock .hero-locations,
+body.intro-lock .trust{ animation:none !important; opacity:0 !important; }
+
+@media (prefers-reduced-motion: reduce){
+  .intro{ display:none !important; }
+  .hero h1.intro-stage{ opacity:1; }   /* stays white over the video hero */
+}
+
+/* =========================================================
+   SECTION HEADER (shared)
+   ========================================================= */
+.shead{ display:flex; flex-direction:column; gap:26px; max-width:var(--maxw); }
+.shead .label{ display:flex; align-items:center; }
+.shead h2{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(30px,5.2vw,76px); line-height:1.02; letter-spacing:-0.01em; max-width:18ch; }
+.shead .sub{ color:var(--ink-soft); max-width:52ch; font-size:clamp(15px,1.3vw,18px); }
+.section-pad{ padding-block:clamp(96px,15vh,200px); }
+.hair{ height:1px; background:var(--line); width:100%; }
+
+/* =========================================================
+   FEATURED WORK (Cunos)
+   ========================================================= */
+.feature{ margin-top:clamp(56px,8vh,110px); }
+.cases{ margin-top:clamp(48px,7vh,90px); display:flex; flex-direction:column; gap:clamp(72px,11vh,140px); }
+.cases .feature{ margin-top:0; }
+.browser{
+  border:1px solid var(--line); background:var(--paper); border-radius:14px; overflow:hidden;
+  box-shadow:0 40px 90px -60px rgba(22,19,15,0.55), 0 2px 0 rgba(255,255,255,0.5) inset;
+}
+.browser__bar{ display:flex; align-items:center; gap:14px; padding:13px 18px; border-bottom:1px solid var(--line-soft); background:var(--bone-2); }
+.browser__dots{ display:flex; gap:7px; }
+.browser__dots i{ width:9px; height:9px; border-radius:50%; background:var(--line); display:block; }
+.browser__url{
+  font-family:"Jost",sans-serif; text-transform:lowercase; letter-spacing:0.06em; font-size:12px; color:var(--ink-soft);
+  display:inline-flex; align-items:center; gap:8px; margin-inline:auto; padding:5px 16px; background:var(--bone); border:1px solid var(--line-soft); border-radius:999px;
+}
+.browser__url svg{ width:11px; height:11px; }
+.browser__view{ position:relative; aspect-ratio:16/9.6; overflow:hidden; }
+.browser__view img{ width:100%; height:100%; object-fit:cover; object-position:top center; transform:scale(1.0); transition:transform 1.6s var(--ease); }
+.feature:hover .browser__view img{ transform:scale(1.045); }
+
+.feature-grid{ display:grid; grid-template-columns:1.55fr 1fr; gap:clamp(28px,4vw,64px); align-items:center; }
+.feature-meta .label{ display:flex; align-items:center; margin-bottom:22px; }
+.feature-meta h3{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(26px,2.6vw,40px); letter-spacing:-0.01em; line-height:1.08; }
+.feature-meta p{ margin-top:18px; color:var(--ink-soft); font-size:15.5px; max-width:42ch; }
+.meta-row{ margin-top:28px; display:flex; flex-direction:column; gap:14px; }
+.meta-row div{ display:flex; justify-content:space-between; gap:16px; padding-bottom:13px; border-bottom:1px solid var(--line-soft); }
+.meta-row dt{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-size:10.5px; color:var(--ink-faint); }
+.meta-row dd{ font-size:13.5px; color:var(--ink); text-align:right; }
+.visit{
+  margin-top:30px; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:12px;
+  display:inline-flex; align-items:center; gap:10px; padding-bottom:4px; border-bottom:1px solid var(--ink); transition:gap .4s var(--ease), border-color .4s var(--ease);
+}
+.visit:hover{ gap:16px; border-color:var(--gold); }
+
+/* =========================================================
+   SELECTED WORK — monochrome gallery (color on hover)
+   ========================================================= */
+.gallery{ margin-top:clamp(48px,7vh,90px); display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(20px,2.6vw,40px); }
+.tile{ display:block; }
+.tile .browser__view{ aspect-ratio:16/10.4; }
+.tile .browser__view img{ transition:transform 1.6s var(--ease); }
+.tile:hover .browser__view img{ transform:scale(1.04); }
+.tile .browser{ box-shadow:0 30px 70px -56px rgba(22,19,15,0.5); transition:box-shadow .6s var(--ease); }
+.tile:hover .browser{ box-shadow:0 44px 90px -54px rgba(22,19,15,0.6); }
+.tile-cap{ display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:20px; padding-bottom:4px; }
+.tile-cap h4{ font-family:"Jost",sans-serif; font-weight:400; font-size:18px; letter-spacing:0.01em; }
+.tile-cap .sector{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-size:10.5px; color:var(--ink-faint); }
+.tile-cap .arr{ color:var(--ink-faint); transition:color .4s var(--ease), transform .4s var(--ease); }
+.tile:hover .tile-cap .arr{ color:var(--gold); transform:translate(3px,-3px); }
+.tile-services{ margin-top:10px; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:10.5px; color:var(--ink-soft); }
+
+/* =========================================================
+   CAPABILITIES — minimal tracked list
+   ========================================================= */
+.cap-list{ margin-top:clamp(40px,6vh,72px); border-top:1px solid var(--line); }
+.cap{ display:grid; grid-template-columns:60px minmax(170px,0.8fr) minmax(0,1fr) 34px; align-items:center; gap:clamp(16px,3vw,48px);
+  padding:clamp(24px,3vw,38px) 6px; border-bottom:1px solid var(--line); transition:padding-left .5s var(--ease); }
+.cap:hover{ padding-left:22px; }
+.cap__n{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.1em; font-size:12px; color:var(--ink-faint); }
+.cap__t{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(24px,3.2vw,42px); letter-spacing:-0.01em; }
+.cap__d{ color:var(--ink-soft); font-size:14.5px; max-width:42ch; justify-self:start; }
+.cap__a{ color:var(--ink-faint); justify-self:end; transition:color .4s var(--ease), transform .5s var(--ease); }
+.cap:hover .cap__a{ color:var(--gold); transform:translateX(6px); }
+@media(max-width:860px){ .cap{ grid-template-columns:40px 1fr 24px; } .cap__d{ display:none; } }
+
+/* =========================================================
+   HOUSE / PROOF
+   ========================================================= */
+.house{ background:var(--bone-2); }
+.house-inner{ display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(40px,6vw,96px); align-items:center; }
+.house h2{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(28px,3.8vw,58px); line-height:1.1; letter-spacing:-0.01em; }
+.house p{ margin-top:24px; color:var(--ink-soft); max-width:46ch; }
+.stats{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); }
+.stat{ background:var(--bone-2); padding:clamp(24px,3vw,40px) clamp(20px,2.4vw,32px); }
+.stat .n{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(38px,4.4vw,64px); letter-spacing:-0.02em; line-height:1; }
+.stat .k{ margin-top:14px; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.2em; font-size:10.5px; color:var(--ink-faint); }
+
+/* =========================================================
+   ENQUIRE
+   ========================================================= */
+.enquire-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,6vw,110px); margin-top:clamp(48px,7vh,90px); }
+.enquire h2{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(34px,5.4vw,82px); line-height:1.0; letter-spacing:-0.01em; }
+.enquire .sub{ margin-top:26px; color:var(--ink-soft); max-width:40ch; }
+.contacts{ margin-top:40px; display:flex; flex-direction:column; gap:18px; }
+.contacts a, .contacts span{ display:flex; gap:18px; align-items:baseline; }
+.contacts .k{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-size:10.5px; color:var(--ink-faint); width:96px; flex:none; }
+.contacts .v{ font-size:15px; color:var(--ink); border-bottom:1px solid transparent; transition:border-color .4s var(--ease); }
+.contacts a:hover .v{ border-color:var(--gold); }
+
+.eform{ display:flex; flex-direction:column; gap:30px; }
+.field{ position:relative; }
+.field label{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.2em; font-size:10.5px; color:var(--ink-faint); display:block; margin-bottom:10px; }
+.field input, .field textarea{
+  width:100%; border:0; border-bottom:1px solid var(--line); background:transparent; outline:none;
+  font-family:"Inter",sans-serif; font-size:16px; color:var(--ink); padding:8px 0 12px; resize:none;
+  transition:border-color .4s var(--ease);
+}
+.field input:focus, .field textarea:focus{ border-color:var(--ink); }
+.eform .submit{
+  align-self:flex-start; margin-top:8px; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:12px; color:var(--bone);
+  background:var(--ink); border:1px solid var(--ink); border-radius:999px; padding:14px 30px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:11px; transition:background .45s var(--ease), color .45s var(--ease);
+}
+.eform .submit:hover{ background:transparent; color:var(--ink); }
+.eform .submit .arr{ transition:transform .45s var(--ease); }
+.eform .submit:hover .arr{ transform:translateX(4px); }
+.eform .privacy{ font-size:11.5px; color:var(--ink-faint); line-height:1.6; }
+.eform .privacy a{ border-bottom:1px solid var(--line); }
+.eform .done{ color:var(--gold); font-family:"Jost",sans-serif; letter-spacing:0.04em; }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer{ background:var(--ink); color:var(--bone); padding-block:clamp(64px,9vh,120px); }
+footer .wrap{ display:block; }
+.foot-mark{ font-family:"Jost",sans-serif; font-weight:300; text-transform:uppercase; letter-spacing:0.01em;
+  font-size:clamp(34px,10.4vw,112px); line-height:0.92; color:var(--bone); white-space:nowrap; }
+.foot-logo{ height:clamp(34px,6.4vw,68px); width:auto; display:block; }
+@media(max-width:760px){ .foot-mark{ white-space:normal; letter-spacing:0; } }
+.foot-cols{ margin-top:clamp(40px,6vh,80px); display:grid; grid-template-columns:2fr 1fr 1fr; gap:40px; padding-top:40px; border-top:1px solid rgba(243,239,232,0.16); }
+.foot-cols .label{ color:rgba(243,239,232,0.5); margin-bottom:18px; display:block; }
+.foot-cols a, .foot-cols p{ color:rgba(243,239,232,0.78); font-size:14px; display:block; margin-bottom:10px; transition:color .4s var(--ease); }
+.foot-cols a:hover{ color:var(--gold-2); }
+.foot-legal{ margin-top:54px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px;
+  font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.14em; font-size:10.5px; color:rgba(243,239,232,0.45); }
+
+/* =========================================================
+   REVEAL + KEYFRAMES
+   ========================================================= */
+/* ===== GLOBAL REACH — interactive map ===== */
+.reach-head{ align-items:center; text-align:center; }
+.reach-head .label{ justify-content:center; }
+.reach-head h2{ margin-inline:auto; }
+.reach-head h2 .em{ font-style:italic; font-weight:300; }
+.worldmap{ position:relative; width:100%; max-width:1060px; margin:clamp(26px,5vh,64px) auto 0; aspect-ratio:4378/2435; }
+.worldmap__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0.15; filter:grayscale(1); user-select:none; -webkit-user-drag:none; }
+.worldmap__arcs{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+.arc-base{ fill:none; stroke:rgba(255,59,48,0.14); stroke-width:0.35; }
+.arc-flow{ fill:none; stroke:var(--red); stroke-width:0.7; stroke-linecap:round; filter:drop-shadow(0 0 1.4px rgba(255,59,48,.7)); }
+.worldmap__pins{ position:absolute; inset:0; pointer-events:none; }
+.pin{ position:absolute; transform:translate(-50%,-50%) scale(0.3); opacity:0; pointer-events:auto; }
+.worldmap.show .pin{ opacity:1; transform:translate(-50%,-50%) scale(1); transition:opacity .6s var(--ease) var(--d,0s), transform .7s var(--ease) var(--d,0s); }
+.pin i{ display:block; width:8px; height:8px; border-radius:50%; background:var(--red); position:relative; box-shadow:0 0 9px 1px rgba(255,59,48,0.55); }
+.pin i::after{ content:""; position:absolute; inset:0; border-radius:50%; border:1px solid var(--red); animation:pulsering 2.8s ease-out infinite; }
+.pin b{ position:absolute; left:50%; top:-24px; transform:translateX(-50%) translateY(4px); font-family:"Jost",sans-serif; font-weight:500; text-transform:uppercase; letter-spacing:0.16em; font-size:9.5px; color:var(--ink); background:var(--bone); padding:2px 4px; white-space:nowrap; opacity:0; transition:opacity .35s var(--ease), transform .35s var(--ease); }
+.pin:hover{ z-index:5; }
+.pin:hover b{ opacity:1; transform:translateX(-50%) translateY(0); }
+.pin:hover i{ box-shadow:0 0 14px 2px rgba(255,59,48,0.8); }
+
+/* ===== REVIEWS — Google rating + animated testimonial slider ===== */
+.reviews{ padding-block:clamp(72px,12vh,150px); }
+.reviews-inner{ max-width:780px; margin-inline:auto; text-align:center; display:flex; flex-direction:column; align-items:center; }
+.g-badge{ display:inline-flex; align-items:center; gap:10px; padding:9px 18px; border:1px solid var(--line); border-radius:999px; transition:border-color .4s var(--ease); }
+.g-badge:hover{ border-color:var(--ink); }
+.g-stars{ color:#F5A623; letter-spacing:2px; font-size:13px; }
+.g-txt{ font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.16em; font-size:11px; color:var(--ink-soft); }
+.reviews-slider{ position:relative; width:100%; margin-top:clamp(34px,5vh,56px); min-height:180px; }
+.rev{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; gap:22px; opacity:0; transform:translateY(12px); transition:opacity .9s var(--ease), transform .9s var(--ease); pointer-events:none; }
+.rev.active{ opacity:1; transform:none; pointer-events:auto; }
+.rev p{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(19px,2.3vw,29px); line-height:1.36; letter-spacing:-0.01em; color:var(--ink); max-width:30ch; }
+.rev cite{ font-style:normal; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.14em; font-size:10.5px; color:var(--ink); }
+.rev cite span{ color:var(--ink-faint); }
+.reviews-dots{ display:flex; gap:9px; justify-content:center; margin-top:clamp(30px,4vh,48px); }
+.reviews-dots button{ width:6px; height:6px; border-radius:50%; border:0; background:var(--line); cursor:pointer; padding:0; transition:background .4s var(--ease), transform .4s var(--ease); }
+.reviews-dots button.on{ background:var(--ink); transform:scale(1.35); }
+
+@keyframes pulsering{ 0%{ transform:scale(1); opacity:0.55; } 100%{ transform:scale(3.6); opacity:0; } }
+@keyframes flow{ from{ stroke-dashoffset:100; } to{ stroke-dashoffset:-3; } }
+
+@media(max-width:760px){
+  .pin b{ display:none; }
+  .reviews-slider{ min-height:240px; }
+}
+
+.reveal{ opacity:0; transform:translateY(26px); transition:opacity 1.15s var(--ease), transform 1.15s var(--ease); }
+.reveal.show{ opacity:1; transform:none; }
+@keyframes rise{ from{ opacity:0; transform:translateY(20px);} to{ opacity:1; transform:none; } }
+@keyframes linerise{ to{ transform:translateY(0); } }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+  .hero h1 .line > span{ transform:none !important; }
+  .reveal{ opacity:1; transform:none; }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media(max-width:980px){
+  .feature-grid{ grid-template-columns:1fr; align-items:start; }
+  .enquire-grid{ grid-template-columns:1fr; }
+  .house-inner{ grid-template-columns:1fr; }
+}
+@media(max-width:760px){
+  .nav-links{ display:none; }
+  .nav-cta{ display:none; }
+  .burger{ display:block; }
+  .gallery{ grid-template-columns:1fr; }
+  .foot-cols{ grid-template-columns:1fr; gap:30px; }
+  /* mobile centred per house rule */
+  .shead{ align-items:center; text-align:center; }
+  .shead h2, .shead .sub{ margin-inline:auto; }
+  .feature-meta .label, .shead .label{ justify-content:center; }
+  .tile-cap{ justify-content:center; flex-direction:column; align-items:center; gap:6px; text-align:center; }
+  .tile-services{ text-align:center; }
+  .house p, .enquire .sub{ margin-inline:auto; text-align:center; }
+  .feature-meta{ text-align:center; margin-top:28px; }
+  .feature-meta h3, .feature-meta p{ margin-inline:auto; }
+  .feature-meta .visit{ margin-inline:auto; }
+}
+
+/* =========================================================
+   SELECTED WORK — live website previews (showcase)
+   Native to the DM Maison system (Jost / Inter / violet)
+   ========================================================= */
+:root{ --swH:600px; }
+.sw-section{ padding-block:clamp(64px,10vh,140px); }
+
+.sw-filterwrap{
+  position:sticky; top:64px; z-index:42;
+  margin:28px 0 4px; padding:10px 0;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:saturate(180%) blur(12px); -webkit-backdrop-filter:saturate(180%) blur(12px);
+  border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
+}
+.sw-filter{ display:flex; gap:9px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.sw-filter::-webkit-scrollbar{ display:none; }
+.sw-chip{
+  flex:0 0 auto; cursor:pointer; white-space:nowrap;
+  font-family:"Jost",sans-serif; font-weight:500; font-size:13.5px; letter-spacing:.01em;
+  color:var(--ink-soft); background:var(--paper); border:1px solid var(--line);
+  padding:9px 17px; border-radius:999px;
+  transition:color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease), transform .18s var(--ease);
+}
+.sw-chip:hover{ transform:translateY(-1px); border-color:var(--ink); }
+.sw-chip[aria-pressed="true"]{ color:#fff; background:var(--ink); border-color:var(--ink); }
+.sw-chip .n{ opacity:.5; font-weight:600; margin-left:7px; font-variant-numeric:tabular-nums; }
+.sw-chip[aria-pressed="true"] .n{ opacity:.7; }
+
+.sw-stagehead{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin:24px 0 14px; }
+.sw-count{ font-family:"Jost",sans-serif; font-weight:500; font-size:13.5px; letter-spacing:.02em; color:var(--ink-faint); }
+.sw-count b{ color:var(--ink); font-weight:600; }
+.sw-nav{ display:flex; gap:9px; }
+.sw-nav button{
+  width:46px; height:46px; border-radius:50%; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink); cursor:pointer; display:grid; place-items:center;
+  transition:transform .18s var(--ease), background .22s var(--ease), color .22s var(--ease), opacity .2s;
+}
+.sw-nav button:hover:not(:disabled){ transform:translateY(-1px); background:var(--ink); color:#fff; }
+.sw-nav button:disabled{ opacity:.28; cursor:not-allowed; }
+.sw-nav svg{ width:18px; height:18px; }
+
+.sw-track{
+  display:flex; gap:clamp(16px,2vw,26px);
+  padding:6px var(--gutter) 26px; margin:0 calc(-1 * var(--gutter));
+  overflow-x:auto; overflow-y:visible;
+  scroll-snap-type:x mandatory; scroll-behavior:smooth;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch; cursor:grab;
+}
+.sw-track::-webkit-scrollbar{ display:none; }
+.sw-track.dragging{ cursor:grabbing; scroll-behavior:auto; scroll-snap-type:none; }
+
+.sw-card{
+  flex:0 0 auto; width:clamp(320px,40vw,440px); scroll-snap-align:center;
+  background:var(--paper); border:1px solid var(--line); border-radius:20px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(17,17,19,.04), 0 24px 50px -30px rgba(17,17,19,.34);
+  display:flex; flex-direction:column;
+  opacity:0; transform:translateY(16px);
+  transition:transform .5s var(--ease), box-shadow .4s var(--ease), opacity .55s var(--ease);
+}
+.sw-card.in{ opacity:1; transform:none; }
+.sw-card:hover{ transform:translateY(-5px); box-shadow:0 1px 2px rgba(17,17,19,.05), 0 36px 70px -34px rgba(17,17,19,.45); }
+.sw-card.feat{ box-shadow:0 0 0 1.5px var(--gold), 0 24px 52px -28px rgba(154,47,198,.42); border-color:transparent; }
+
+.sw-media{ position:relative; width:100%; height:var(--swH); background:var(--bone-2); overflow:hidden; }
+.sw-media iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff; opacity:0; transition:opacity .6s var(--ease); }
+.sw-media iframe.loaded{ opacity:1; }
+.sw-skel{ position:absolute; inset:0; background:var(--bone-2); overflow:hidden; z-index:1; }
+.sw-skel::after{ content:""; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent); animation:swsh 1.6s infinite; }
+@keyframes swsh{ 100%{ transform:translateX(100%); } }
+.sw-skel span{ position:absolute; left:20px; bottom:18px; font-family:"Jost",sans-serif; font-size:12px; color:var(--ink-faint); z-index:2; }
+.sw-media.loaded .sw-skel{ display:none; }
+
+.sw-badge{ position:absolute; top:13px; left:13px; z-index:3; display:inline-flex; align-items:center; gap:6px;
+  background:rgba(17,17,19,.78); color:#fff; font-family:"Jost",sans-serif; font-size:10.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase;
+  padding:5px 10px; border-radius:999px; backdrop-filter:blur(6px); pointer-events:none; }
+.sw-badge i{ width:6px; height:6px; border-radius:50%; background:#46d17f; box-shadow:0 0 0 0 rgba(70,209,127,.7); animation:swpulse 2s infinite; }
+@keyframes swpulse{ 70%{ box-shadow:0 0 0 7px rgba(70,209,127,0);} 100%{ box-shadow:0 0 0 0 rgba(70,209,127,0);} }
+.sw-hint{ position:absolute; right:13px; bottom:13px; z-index:3; display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,255,255,.9); border:1px solid var(--line); color:var(--ink-soft); font-size:11px; font-weight:500;
+  padding:5px 11px; border-radius:999px; backdrop-filter:blur(4px); pointer-events:none; transition:opacity .4s; }
+.sw-media:hover .sw-hint{ opacity:0; }
+.sw-hint svg{ width:11px; height:11px; animation:swbob 1.8s ease-in-out infinite; }
+@keyframes swbob{ 0%,100%{ transform:translateY(-1px);} 50%{ transform:translateY(2px);} }
+
+.sw-foot{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 19px 18px; border-top:1px solid var(--line); }
+.sw-foot .m{ min-width:0; }
+.sw-foot .b{ font-family:"Jost",sans-serif; font-weight:500; font-size:17px; letter-spacing:-.005em; line-height:1.2; color:var(--ink); }
+.sw-foot .i{ font-size:12.5px; color:var(--ink-faint); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sw-visit{ flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; font-family:"Jost",sans-serif; font-weight:500; font-size:13px; color:var(--ink);
+  border:1px solid var(--line); border-radius:999px; padding:8px 14px; transition:background .2s var(--ease), color .2s var(--ease), transform .18s var(--ease); }
+.sw-visit:hover{ background:var(--ink); color:#fff; transform:translateY(-1px); }
+.sw-visit svg{ width:12px; height:12px; }
+
+.sw-rail{ height:3px; border-radius:3px; background:var(--line-soft); margin-top:2px; position:relative; overflow:hidden; }
+.sw-rail .f{ position:absolute; left:0; top:0; height:100%; width:20%; background:linear-gradient(90deg,var(--gold),var(--gold-2)); border-radius:3px; transition:width .12s linear, left .12s linear; }
+.sw-empty{ display:none; padding:48px 0 16px; text-align:center; color:var(--ink-faint); }
+
+@media(max-width:760px){
+  :root{ --swH:64vh; }
+  .sw-stagehead .sw-nav, .sw-rail{ display:none; }
+  .sw-track{ flex-direction:column; gap:20px; overflow:visible; scroll-snap-type:none; cursor:default; padding:6px 0 4px; margin:0; }
+  .sw-card{ width:100%; scroll-snap-align:none; }
+  .sw-media{ min-height:420px; }
+  .sw-stagehead{ justify-content:center; }
+  .sw-count{ text-align:center; }
+}
+@media (prefers-reduced-motion:reduce){
+  .sw-skel::after, .sw-badge i, .sw-hint svg{ animation:none; }
+  .sw-track{ scroll-behavior:auto; }
+}
+</style>
+</head>
+<body class="intro-lock">
+
+<!-- ===================== INTRO (sign-post brand reveal) ===================== -->
+<div class="intro" id="intro" aria-hidden="true">
+  <video class="intro__video" id="introVideo" autoplay muted playsinline webkit-playsinline preload="auto" poster="">
+    <source src="assets/hero/signpost-intro.mp4" type="video/mp4" media="(min-width:761px)" />
+  </video>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="frame" aria-hidden="true"></div>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav" id="nav">
+  <a href="#top" class="wordmark" aria-label="Digital Movement"><img src="assets/brand/logo-color-negative.svg" alt="Digital Movement" class="brandlogo brandlogo--neg" /><img src="assets/brand/logo-color-positive.svg" alt="Digital Movement" class="brandlogo brandlogo--pos" /></a>
+  <div class="nav-controls">
+    <a href="https://au.linkedin.com/company/digitalmovement" target="_blank" rel="noopener" class="nav-social" aria-label="Digital Movement on LinkedIn">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .78 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .78 23.2 0 22.22 0z"/></svg>
+    </a>
+    <button class="burger" id="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <a href="#work">Selected work</a>
+  <a href="https://wa.me/442038157992" target="_blank" rel="noopener">WhatsApp us</a>
+  <a href="mailto:office@digitalmovement.uk">Email us</a>
+  <span class="label">London · Auckland · Berlin · Melbourne</span>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <div class="hero-bg" id="heroBg" aria-hidden="true">
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide is-active" data-i="0">
+        <video class="hero-slide__video" muted loop playsinline webkit-playsinline preload="auto" poster="assets/hero/cunos-hero-poster.jpg"><source src="assets/hero/cunos-hero-mobile.mp4" type="video/mp4" media="(max-width:760px)" /><source src="assets/hero/cunos-hero.mp4" type="video/mp4" /></video>
+      </div>
+      <div class="hero-slide" data-i="1">
+        <video class="hero-slide__video" muted loop playsinline webkit-playsinline preload="none" poster="assets/hero/auckland-poster.jpg"><source src="assets/hero/auckland-mobile.mp4" type="video/mp4" media="(max-width:760px)" /><source src="assets/hero/auckland.mp4" type="video/mp4" /></video>
+      </div>
+      <div class="hero-slide" data-i="2">
+        <video class="hero-slide__video" muted loop playsinline webkit-playsinline preload="none" poster="assets/hero/berlin-poster.jpg"><source src="assets/hero/berlin-mobile.mp4" type="video/mp4" media="(max-width:760px)" /><source src="assets/hero/berlin.mp4" type="video/mp4" /></video>
+      </div>
+      <div class="hero-slide" data-i="3">
+        <video class="hero-slide__video" muted loop playsinline webkit-playsinline preload="none" poster="assets/hero/melbourne-poster.jpg"><source src="assets/hero/melbourne-mobile.mp4" type="video/mp4" media="(max-width:760px)" /><source src="assets/hero/melbourne.mp4" type="video/mp4" /></video>
+      </div>
+    </div>
+    <div class="hero-bg__scrim"></div>
+  </div>
+
+  <!-- vertical award ribbon — hangs from the top-left of the hero (addressbali-style) -->
+  <div class="hero-ribbon" id="heroRibbon" role="img" aria-label="Awarded Best Digital Marketing Agency in Australia 2026 by Digital Reference">
+    <svg class="hero-ribbon__medal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="5.5"/><path d="M8.4 13.2 6.8 21l5.2-2.9 5.2 2.9-1.6-7.8"/></svg>
+    <span class="hero-ribbon__brand">Digital<br>Reference</span>
+    <span class="hero-ribbon__rule"></span>
+    <span class="hero-ribbon__tag">Award Winner</span>
+    <span class="hero-ribbon__title">Best Digital Marketing Agency in Australia</span>
+    <span class="hero-ribbon__stars">★★★★★</span>
+    <span class="hero-ribbon__year">2026</span>
+  </div>
+
+  <div class="wrap" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1;">
+    <p class="eyebrow label"><span class="rule-gold"></span> Digital Movement · Est. 2018</p>
+
+    <h1 class="disp">
+      <span class="line"><span>Award-winning</span></span>
+      <span class="line"><span><em class="em">Digital</em> Agency</span></span>
+    </h1>
+
+    <p class="lead">
+      A London studio for considered websites and quiet, lasting growth.
+    </p>
+
+    <div class="hero-trust" id="heroTrust">
+      <a class="hero-google" href="https://www.google.com/search?q=Digital+Movement+Melbourne+Reviews" target="_blank" rel="noopener" aria-label="Rated 5.0 on Google — read reviews">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47a5.53 5.53 0 0 1-2.4 3.58v3h3.87c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.08 7.94-2.91l-3.87-3a7.2 7.2 0 0 1-10.73-3.78H1.34v3.09A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.34 14.31a7.2 7.2 0 0 1 0-4.62V6.6H1.34a12 12 0 0 0 0 10.8l4-3.09z"/><path fill="#EA4335" d="M12 4.77c1.77 0 3.35.61 4.6 1.8l3.42-3.42A11.97 11.97 0 0 0 1.34 6.6l4 3.09A7.2 7.2 0 0 1 12 4.77z"/></svg>
+        <span class="g-stars">★★★★★</span>
+        <span class="hero-google__txt">5.0 on Google · 100+ reviews</span>
+      </a>
+    </div>
+
+    <div class="hero-actions">
+      <form class="audit-form" id="auditForm" novalidate>
+        <input type="email" name="email" id="auditEmail" placeholder="Your email" aria-label="Your email, for a private audit" required />
+        <button type="submit">Request <span class="arr">→</span></button>
+      </form>
+      <span class="audit-note" id="auditNote">A complimentary audit, by appointment</span>
+    </div>
+
+    <p class="hero-locations" aria-label="Studios in Auckland, Melbourne, Berlin and London">
+      <span>Auckland, NZ</span><i>·</i>
+      <span>Melbourne, AU</span><i>·</i>
+      <span>Berlin, DE</span><i>·</i>
+      <span>London, UK</span>
+    </p>
+  </div>
+
+  <!-- office slider — synced with the background clips, foot of the viewport -->
+  <div class="hero-locslider" id="heroLocSlider" aria-live="polite" aria-label="Our offices">
+    <div class="hero-locslider__track">
+      <span class="hero-locslider__item is-active">
+        <span class="loc-name">London Office, UK</span>
+        <span class="loc-addr">128 City Road, London, EC1V 2NX</span>
+        <span class="loc-contact"><a href="tel:+442076897888">+44 (0) 207 689 7888</a> · <a href="mailto:office@digitalmovement.uk">office@digitalmovement.uk</a></span>
+        <span class="loc-web"><a href="https://digitalmovement.uk" target="_blank" rel="noopener">digitalmovement.uk</a></span>
+      </span>
+      <span class="hero-locslider__item">
+        <span class="loc-name">Auckland Office, New Zealand</span>
+        <span class="loc-addr">Level 8, 139 Quay Street, Auckland 1010</span>
+        <span class="loc-contact"><a href="tel:+6493632929">+64 (0) 9 363 2929</a> · <a href="mailto:office@digitalmovement.co.nz">office@digitalmovement.co.nz</a></span>
+        <span class="loc-web"><a href="https://www.digitalmovement.co.nz" target="_blank" rel="noopener">www.digitalmovement.co.nz</a></span>
+      </span>
+      <span class="hero-locslider__item">
+        <span class="loc-name">Berlin Office, Germany</span>
+        <span class="loc-addr">Potsdamer Platz 1, 10117 Berlin</span>
+        <span class="loc-contact"><a href="tel:+491768236064">+49 (0) 176 8236064</a> · <a href="mailto:office@digitalmovement.de">office@digitalmovement.de</a></span>
+        <span class="loc-web"><a href="https://www.digitalmovement.de" target="_blank" rel="noopener">www.digitalmovement.de</a></span>
+      </span>
+      <span class="hero-locslider__item">
+        <span class="loc-name">Melbourne HQ, AU</span>
+        <span class="loc-addr">Level 3/480 Collins St, Melbourne VIC 3000</span>
+        <span class="loc-contact"><a href="tel:+61300988161">+61 (0) 300 988 161</a> · <a href="mailto:office@digitalmovement.com.au">office@digitalmovement.com.au</a></span>
+        <span class="loc-web"><a href="https://www.digitalmovement.com.au" target="_blank" rel="noopener">www.digitalmovement.com.au</a></span>
+      </span>
+    </div>
+    <div class="hero-locslider__dots" aria-hidden="true">
+      <button class="is-active" type="button" aria-label="London office"></button>
+      <button type="button" aria-label="Auckland office"></button>
+      <button type="button" aria-label="Berlin office"></button>
+      <button type="button" aria-label="Melbourne HQ"></button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== SELECTED WORK — LIVE PREVIEWS (Section 1) ===================== -->
+<section id="work" class="section-pad sw-section">
+  <div class="wrap">
+    <div class="shead reveal">
+      <p class="label"><span class="rule-gold"></span> 01 — Selected work</p>
+      <h2 class="disp">Live sites we&rsquo;ve <em class="em">built</em>.</h2>
+      <p class="sub">Every frame below is the real, working website &mdash; animating as it loads, just as a visitor sees it. Scroll inside any frame to explore, or filter by industry to find work like yours.</p>
+    </div>
+
+    <div class="sw-filterwrap">
+      <div class="sw-filter" id="swFilter" role="tablist" aria-label="Filter work by industry"></div>
+    </div>
+
+    <div class="sw-stagehead">
+      <div class="sw-count" id="swCount"></div>
+      <div class="sw-nav">
+        <button id="swPrev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="swNext" type="button" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+
+    <div class="sw-track" id="swTrack" tabindex="0" aria-label="Website previews — use the left and right arrow keys to move"></div>
+    <div class="sw-rail"><div class="f" id="swRail"></div></div>
+    <div class="sw-empty" id="swEmpty">No work in this category yet.</div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <img src="assets/brand/logo-color-negative.svg" alt="Digital Movement" class="foot-logo" />
+    <div class="foot-cols">
+      <div>
+        <span class="label">The studio</span>
+        <p>A London atelier for digital growth. Websites, search, and demand for brands that refuse to look ordinary.</p>
+      </div>
+      <div>
+        <span class="label">Index</span>
+        <a href="#top">Top</a>
+        <a href="#work">Selected work</a>
+        <a href="https://wa.me/442038157992" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+      <div>
+        <span class="label">Reach us</span>
+        <a href="mailto:office@digitalmovement.uk">office@digitalmovement.uk</a>
+        <a href="tel:+442038157992">0203 815 7992</a>
+        <a href="https://www.instagram.com/digitalmovementuk" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=61582384685712" target="_blank" rel="noopener">Facebook</a>
+      </div>
+    </div>
+    <div class="foot-legal">
+      <span>© 2026 Digital Movement UK</span>
+      <span>London · Est. 2018 · 5.0 ★ on Google</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var nav = document.getElementById('nav');
+  var progress = document.getElementById('progress');
+  var hero = document.getElementById('top');
+  var h1 = hero.querySelector('h1');
+
+  // ---- INTRO choreography ----
+  // 0s : sign-post clip plays (slow push-in zoom onto the post)
+  // 2s : sign-post clip blends OUT while the office carousel (city clip + tab) and the H1
+  //      blend IN together — no dark layover. Tab 1 (London) holds ~2s, then it
+  //      auto-advances office by office, each tab synced to its own background clip
+  var intro = document.getElementById('intro');
+  var introVideo = document.getElementById('introVideo');
+  var heroBg = document.getElementById('heroBg');
+  var locSlider = document.getElementById('heroLocSlider');
+  var heroTrust = document.getElementById('heroTrust');
+  var heroRibbon = document.getElementById('heroRibbon');
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CLIP_OUT_MS = 2000;   // after 2s: cross-fade sign-post clip → carousel + tabs + H1
+
+  if(h1){ h1.classList.add('intro-stage'); }   // stage the H1 above the clip (hidden, white)
+
+  // --- synced carousel: each office tab paired with its own city clip ---
+  var carousel = (function(){
+    if(!locSlider) return { start:function(){}, warmFirst:function(){} };
+    var items  = [].slice.call(locSlider.querySelectorAll('.hero-locslider__item'));
+    var dots   = [].slice.call(locSlider.querySelectorAll('.hero-locslider__dots button'));
+    var slides = [].slice.call(document.querySelectorAll('.hero-slide'));
+    var n = items.length, idx = 0, timer = null, started = false, warmed = {};
+    var FIRST_HOLD = 2200, DWELL = 4200, FADE = 1200;
+    var mob = !!(window.matchMedia && window.matchMedia('(max-width:760px)').matches);
+    function vid(i){ return slides[i] ? slides[i].querySelector('video') : null; }
+    function play(i){ var v = vid(i); if(v){ v.muted = true; v.setAttribute('muted',''); var p = v.play(); if(p && p.catch){ p.catch(function(){}); } } }
+    function pause(i){ var v = vid(i); if(v){ try{ v.pause(); }catch(e){} } }
+    function warm(i){ if(warmed[i]) return; var v = vid(i); if(v){ try{ v.preload='auto'; v.load(); warmed[i]=1; }catch(e){} } }
+    // iOS-reliable start of a muted inline clip (with one retry)
+    function playForce(i){ var v = vid(i); if(!v) return; v.muted = true; v.setAttribute('muted',''); v.setAttribute('autoplay',''); v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline',''); try{ if(v.preload==='none'){ v.preload='auto'; v.load(); } }catch(e){} var p = v.play(); if(p && p.catch){ p.catch(function(){ setTimeout(function(){ v.play().catch(function(){}); }, 250); }); } }
+    function tick(){ try{ go(idx + 1); }catch(e){} schedule(DWELL); }   // a play error can never stop the rotation
+    function schedule(d){ if(n < 2){ return; } if(timer){ clearTimeout(timer); } timer = setTimeout(tick, d); }   /* always auto-advance (incl. reduce-motion) */
+    function go(i){
+      i = (i + n) % n; if(i === idx) return;
+      var prev = idx; idx = i;
+      [items, dots, slides].forEach(function(set){ if(set[prev]) set[prev].classList.remove('is-active'); if(set[idx]) set[idx].classList.add('is-active'); });
+      try {
+        if(mob){ playForce(idx); }   // re-assert the now-visible clip (iOS throttles hidden video)
+        else { play(idx); warm((idx + 1) % n); setTimeout(function(){ if(idx !== prev) pause(prev); }, FADE); }
+      } catch(e){}
+    }
+    dots.forEach(function(d, i){ d.addEventListener('click', function(){ go(i); schedule(DWELL); }); });
+    return {
+      warmFirst: function(){ if(!mob){ warmed[0] = 1; play(0); } },     // desktop: decode clip 0 behind the intro
+      start: function(){
+        if(started) return; started = true;
+        schedule(FIRST_HOLD);   // rotation FIRST — never blocked by a playback exception
+        try {
+          if(mob){ slides.forEach(function(s, i){ try{ playForce(i); }catch(e){} }); }   // mobile: every (tiny) clip plays
+          else { warmed[0] = 1; play(0); warm(1); }
+        } catch(e){}
+      }
+    };
+  })();
+
+  carousel.warmFirst();   // start London clip decoding now → cross-fade never reveals black
+
+  function revealVideoHero(){
+    if(heroBg){ heroBg.classList.add('in'); }        // smooth crossfade clip 1 → clip 2
+    if(locSlider){ locSlider.classList.add('in'); }  // office tabs blend in (with the H1)
+    carousel.start();                                // play tab 1 + begin auto-advance
+    // slightly later: Google review + award ribbon blend in together, in sync
+    setTimeout(function(){
+      if(heroTrust){ heroTrust.classList.add('in'); }
+      if(heroRibbon){
+        heroRibbon.classList.add('in');                                              // banner unrolls (fabric)
+        setTimeout(function(){ heroRibbon.classList.add('glassy'); }, 1650);          // settled → frost to glass
+      }
+    }, 800);
+  }
+
+  function endIntro(){
+    if(!intro || intro.classList.contains('done')) return;
+    intro.classList.add('done');                    // sign-post clip blends out (1.2s)
+    if(h1){ h1.classList.add('show'); }             // headline stays white over the carousel
+    revealVideoHero();
+    document.body.classList.remove('intro-lock');
+    setTimeout(function(){
+      intro.classList.add('gone');
+      if(h1){ h1.classList.add('rest'); }           // drop the elevated stacking once the clip is gone
+      if(introVideo){ try{ introVideo.pause(); }catch(e){} }
+    }, 1850);
+  }
+
+  var isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+  if(prefersReduced || isMobile || !intro){
+    // mobile / reduced-motion: skip the sign-post clip → straight to the carousel + tabs
+    document.body.classList.remove('intro-lock');
+    if(intro){ intro.classList.add('done','gone'); }
+    if(introVideo){ try{ introVideo.pause(); }catch(e){} }
+    if(h1){ h1.classList.add('show','rest'); }
+    revealVideoHero();
+  } else {
+    var pv = introVideo && introVideo.play(); if(pv && pv.catch){ pv.catch(function(){}); }
+    setTimeout(endIntro, CLIP_OUT_MS);               // 2s: cross-fade clip 1 → carousel + tabs + H1
+    setTimeout(endIntro, CLIP_OUT_MS + 5000);        // hard fallback so the page is never trapped
+  }
+
+  // nav scrolled state + progress
+  function onScroll(){
+    var y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle('scrolled', y > 24);
+    document.body.classList.toggle('scrolled', y > 24);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+
+  // reveal on scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('show'); io.unobserve(en.target); } });
+  }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // count-up
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var dur = 1500, start = null;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = target * eased;
+      el.textContent = (dec ? val.toFixed(dec) : Math.round(val)) + (p === 1 ? suffix : '');
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var statIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ animateCount(en.target); statIO.unobserve(en.target); } });
+  }, { threshold:0.6 });
+  document.querySelectorAll('[data-count]').forEach(function(el){ statIO.observe(el); });
+
+  // mobile drawer
+  var burger = document.getElementById('burger');
+  var drawer = document.getElementById('drawer');
+  function toggle(){ var open = nav.classList.toggle('open'); drawer.classList.toggle('show', open); document.body.style.overflow = open ? 'hidden':''; }
+  burger.addEventListener('click', toggle);
+  drawer.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ nav.classList.remove('open'); drawer.classList.remove('show'); document.body.style.overflow=''; }); });
+
+  // hero audit form — graceful inline confirmation + mailto handoff
+  var af = document.getElementById('auditForm');
+  af.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('auditEmail').value.trim();
+    if(!email || email.indexOf('@') < 1){ document.getElementById('auditEmail').focus(); return; }
+    af.style.display = 'none';
+    var note = document.getElementById('auditNote');
+    note.className = 'audit-ok';
+    note.textContent = 'Thank you — your private audit is on its way.';
+    window.location.href = 'mailto:office@digitalmovement.uk?subject=Private%20audit%20request&body=Please%20send%20a%20private%20audit%20for%3A%20' + encodeURIComponent(email);
+  });
+
+  // enquire form
+  var ef = document.getElementById('enquireForm') || { addEventListener:function(){} };
+  ef.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = new FormData(ef);
+    var name = (data.get('name')||'').toString().trim();
+    var email = (data.get('email')||'').toString().trim();
+    if(!email || email.indexOf('@') < 1){ document.getElementById('e').focus(); return; }
+    var p = document.getElementById('enquirePrivacy');
+    p.className = 'done';
+    p.textContent = 'Thank you, ' + (name || 'we') + ' — your enquiry is on its way. We reply within one working day.';
+    ef.querySelector('.submit').style.display = 'none';
+    window.location.href = 'mailto:office@digitalmovement.uk?subject=' + encodeURIComponent('Enquiry from ' + (name||'website')) +
+      '&body=' + encodeURIComponent((data.get('message')||'').toString() + '\n\n— ' + name + ' · ' + email);
+  });
+})();
+
+/* ===== Global reach map (pins + animated arcs) + reviews slider ===== */
+(function(){
+  var pinsEl = document.getElementById('worldPins');
+  var arcsEl = document.getElementById('worldArcs');
+  if (pinsEl && arcsEl) {
+    // x/y are percentages of the map box (tuned to the world.svg extent).
+    var P = {
+      london:    { x:50.0, y:21.4, label:'London' },
+      berlin:    { x:53.7, y:20.8, label:'Berlin' },
+      macau:     { x:81.5, y:37.7, label:'Macau' },
+      bali:      { x:82.0, y:54.8, label:'Bali' },
+      melbourne: { x:90.3, y:71.0, label:'Melbourne' },
+      auckland:  { x:98.5, y:70.5, label:'Auckland' }
+    };
+    var order = ['london','berlin','macau','bali','melbourne','auckland'];
+    order.forEach(function(k, i){
+      var p = P[k];
+      var el = document.createElement('span');
+      el.className = 'pin';
+      el.style.left = p.x + '%';
+      el.style.top = p.y + '%';
+      el.style.setProperty('--d', (i * 0.12) + 's');
+      el.innerHTML = '<i></i><b>' + p.label + '</b>';
+      pinsEl.appendChild(el);
+    });
+    /* connections removed — only the points animate */
+  }
+
+  var slider = document.getElementById('reviewsSlider');
+  var dotsEl = document.getElementById('reviewsDots');
+  if (slider && dotsEl) {
+    var revs = [].slice.call(slider.querySelectorAll('.rev'));
+    var idx = 0, timer = null;
+    revs.forEach(function(_, i){
+      var b = document.createElement('button');
+      b.setAttribute('aria-label', 'Testimonial ' + (i + 1));
+      b.addEventListener('click', function(){ go(i); reset(); });
+      dotsEl.appendChild(b);
+    });
+    var dots = [].slice.call(dotsEl.children);
+    function go(n){
+      idx = (n + revs.length) % revs.length;
+      revs.forEach(function(r, i){ r.classList.toggle('active', i === idx); });
+      dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+    }
+    function reset(){ if (timer) clearInterval(timer); timer = setInterval(function(){ go(idx + 1); }, 5200); }
+    go(0); reset();
+    slider.addEventListener('mouseenter', function(){ if (timer) clearInterval(timer); });
+    slider.addEventListener('mouseleave', reset);
+  }
+})();
+</script>
+
+<script>
+/* ============ SELECTED WORK — live previews (Section 1) ============ */
+(function(){
+  var INDUSTRIES = [
+    {key:"all",        label:"All"},
+    {key:"realestate", label:"Real Estate"},
+    {key:"finance",    label:"Finance & Consulting"},
+    {key:"insurance",  label:"Insurance & Cyber"},
+    {key:"health",     label:"Healthcare"},
+    {key:"home",       label:"Home & Trades"},
+    {key:"agency",     label:"Agency & Creative"}
+  ];
+  var SITES = [
+    {brand:"ADDRESSBALI", industry:"realestate", tag:"Luxury beachfront real estate · Bali", url:"https://www.addressbali.com", feat:true},
+    {brand:"Husband Retail", industry:"realestate", tag:"Retail real-estate consultancy", url:"https://digitalmovementuk.github.io/husband-retail/"},
+    {brand:"Cunos Consulting", industry:"finance", tag:"Senior finance support · London", url:"https://cunos.co.uk"},
+    {brand:"Finarch Global", industry:"finance", tag:"Investment-tech transformation", url:"https://digitalmovementuk.github.io/finarch-landing/"},
+    {brand:"CX", industry:"finance", tag:"Process & digitalisation consulting", url:"https://digitalmovementuk.github.io/cx/"},
+    {brand:"IMAP", industry:"finance", tag:"Change management & org development", url:"https://digitalmovementuk.github.io/imap-landing-page/"},
+    {brand:"Ratiobox", industry:"finance", tag:"Accounting, bookkeeping & payroll", url:"sites/ratiobox/"},
+    {brand:"Pentadoc AG", industry:"insurance", tag:"Digital transformation for insurers", url:"https://digitalmovementuk.github.io/Pentadoc-Prototype/"},
+    {brand:"AEXIS", industry:"insurance", tag:"AI-era cyber assurance", url:"https://digitalmovementuk.github.io/aexis/"},
+    {brand:"Puriva", industry:"health", tag:"Aesthetic & lifestyle clinic", url:"https://digitalmovementuk.github.io/puriva/"},
+    {brand:"Digital Praxis", industry:"health", tag:"Dental practice marketing", url:"https://digitalmovementuk.github.io/digitalpraxis.io/"},
+    {brand:"Re;mind", industry:"health", tag:"Mental health therapies", url:"https://digitalmovementuk.github.io/remind-v2/"},
+    {brand:"Fantastic Finish", industry:"home", tag:"Window cleaning · Fareham", url:"https://digitalmovementuk.github.io/fantastic_finish/"},
+    {brand:"Cheshire Conservatory Roofs", industry:"home", tag:"Conservatory roof replacement", url:"https://digitalmovementuk.github.io/cheshire_conservatory_roofs/"},
+    {brand:"Clearaway Services", industry:"home", tag:"Asbestos removal & strip-out", url:"https://digitalmovementuk.github.io/Clearaway-Services/"},
+    {brand:"NEO THE AGENCY", industry:"agency", tag:"Creative & SEO agency · Berlin", url:"https://www.neotheagency.de"},
+    {brand:"Vanguard", industry:"agency", tag:"World-class digital collective", url:"https://digitalmovementuk.github.io/vanguard-hero/"},
+    {brand:"Digital Movement UK", industry:"agency", tag:"Performance marketing · UK", url:"https://digitalmovementuk.github.io/DMUK_homepage_v3_apple/"},
+    {brand:"Digital Movement NZ", industry:"agency", tag:"Performance marketing · New Zealand", url:"https://www.digitalmovement.co.nz"}
+  ];
+
+  var track  = document.getElementById('swTrack');
+  var filter = document.getElementById('swFilter');
+  var countEl= document.getElementById('swCount');
+  var emptyEl= document.getElementById('swEmpty');
+  var prev   = document.getElementById('swPrev');
+  var next   = document.getElementById('swNext');
+  var rail   = document.getElementById('swRail');
+  if(!track) return;
+  var labelOf = {}; INDUSTRIES.forEach(function(i){ labelOf[i.key]=i.label; });
+
+  var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+  var SCROLLICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+
+  SITES.forEach(function(s){
+    var card = document.createElement('article');
+    card.className = 'sw-card' + (s.feat ? ' feat' : '');
+    card.setAttribute('data-industry', s.industry);
+    card.innerHTML =
+      '<div class="sw-media" data-src="'+s.url+'">'+
+        '<div class="sw-skel"><span>Loading live site&hellip;</span></div>'+
+        '<span class="sw-badge"><i></i>Live site</span>'+
+        '<span class="sw-hint">'+SCROLLICON+'Scroll to explore</span>'+
+      '</div>'+
+      '<div class="sw-foot">'+
+        '<div class="m">'+
+          '<div class="b">'+s.brand+'</div>'+
+          '<div class="i">'+labelOf[s.industry]+' · '+s.tag+'</div>'+
+        '</div>'+
+        '<a class="sw-visit" href="'+s.url+'" target="_blank" rel="noopener" aria-label="Open '+s.brand+' live in a new tab">Visit '+ARROW+'</a>'+
+      '</div>';
+    track.appendChild(card);
+  });
+  var cards = [].slice.call(track.children);
+
+  function activate(media){
+    if(!media || media.getAttribute('data-loaded')) return;
+    media.setAttribute('data-loaded','1');
+    var f = document.createElement('iframe');
+    f.loading = 'eager';
+    f.setAttribute('scrolling','yes');
+    f.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+    f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock');
+    f.setAttribute('title', media.parentNode.querySelector('.b').textContent + ' — live website preview');
+    f.addEventListener('load', function(){ f.classList.add('loaded'); media.classList.add('loaded'); });
+    f.src = media.getAttribute('data-src');
+    media.appendChild(f);
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); activate(e.target.querySelector('.sw-media')); }
+    });
+  }, { root:null, rootMargin:'200px 700px', threshold:0.04 });
+  cards.forEach(function(c){ io.observe(c); });
+
+  /* ---- filter chips ---- */
+  var activeKey = 'all';
+  function countFor(k){ return k==='all' ? SITES.length : SITES.filter(function(s){return s.industry===k;}).length; }
+  INDUSTRIES.forEach(function(ind){
+    var n = countFor(ind.key);
+    if(ind.key!=='all' && n===0) return;
+    var b = document.createElement('button');
+    b.className='sw-chip'; b.type='button'; b.setAttribute('role','tab');
+    b.setAttribute('aria-pressed', ind.key==='all' ? 'true':'false');
+    b.setAttribute('data-key', ind.key);
+    b.innerHTML = ind.label + '<span class="n">'+n+'</span>';
+    b.addEventListener('click', function(){ applyFilter(ind.key, b); });
+    filter.appendChild(b);
+  });
+
+  function applyFilter(key, btn){
+    activeKey = key;
+    [].forEach.call(filter.children, function(c){ c.setAttribute('aria-pressed', c===btn ? 'true':'false'); });
+    var shown=0;
+    cards.forEach(function(c){
+      var match = key==='all' || c.getAttribute('data-industry')===key;
+      c.style.display = match ? '' : 'none';
+      if(match){ shown++; activate(c.querySelector('.sw-media')); requestAnimationFrame(function(){ c.classList.add('in'); }); }
+    });
+    countEl.innerHTML = '<b>'+shown+'</b> '+(shown===1?'site':'sites')+(key==='all'?'':' in '+labelOf[key]);
+    emptyEl.style.display = shown ? 'none' : 'block';
+    track.scrollTo({left:0, behavior:'auto'});
+    updateRail();
+    if(btn){ btn.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'}); }
+  }
+
+  /* ---- slider controls ---- */
+  function step(){
+    var first = cards.filter(function(c){return c.style.display!=='none';})[0];
+    var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 22;
+    return first ? first.getBoundingClientRect().width + gap : 360;
+  }
+  prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
+  next.addEventListener('click', function(){ track.scrollBy({left: step(), behavior:'smooth'}); });
+
+  function updateRail(){
+    var max = track.scrollWidth - track.clientWidth;
+    var ratio = max>4 ? track.scrollLeft/max : 0;
+    var visible = track.clientWidth / Math.max(track.scrollWidth,1);
+    var w = Math.max(12, visible*100);
+    rail.style.width = w + '%';
+    rail.style.left = (ratio*(100-w)) + '%';
+    prev.disabled = track.scrollLeft<=2;
+    next.disabled = track.scrollLeft>=max-2;
+  }
+  track.addEventListener('scroll', updateRail, {passive:true});
+  track.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'){ e.preventDefault(); next.click(); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); prev.click(); }
+  });
+
+  /* drag-to-scroll on desktop; never hijack clicks/scroll inside an iframe */
+  var down=false, sx=0, sl=0;
+  track.addEventListener('pointerdown', function(e){
+    if(window.innerWidth<=760) return;
+    if(e.target.closest && e.target.closest('iframe')) return;
+    down=true; sx=e.clientX; sl=track.scrollLeft; track.classList.add('dragging');
+  });
+  window.addEventListener('pointermove', function(e){ if(down){ track.scrollLeft = sl-(e.clientX-sx); } });
+  window.addEventListener('pointerup', function(){ if(down){ down=false; track.classList.remove('dragging'); } });
+
+  applyFilter('all', filter.querySelector('.sw-chip'));
+  window.addEventListener('resize', updateRail);
+  setTimeout(updateRail, 400);
+})();
+</script>
+</body>
+</html>
