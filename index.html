@@ -719,19 +719,21 @@ footer .wrap{ display:block; }
 .sw-track.dragging{ cursor:grabbing; scroll-behavior:auto; scroll-snap-type:none; }
 
 .sw-card{
-  flex:0 0 auto; width:clamp(320px,40vw,440px); scroll-snap-align:center;
+  flex:0 0 auto; width:clamp(360px,40vw,460px); scroll-snap-align:center;
   background:var(--paper); border:1px solid var(--line); border-radius:20px; overflow:hidden;
   box-shadow:0 1px 2px rgba(17,17,19,.04), 0 24px 50px -30px rgba(17,17,19,.34);
   display:flex; flex-direction:column;
   opacity:0; transform:translateY(16px);
   transition:transform .5s var(--ease), box-shadow .4s var(--ease), opacity .55s var(--ease);
+  content-visibility:auto; contain-intrinsic-size:460px 700px;
 }
 .sw-card.in{ opacity:1; transform:none; }
 .sw-card:hover{ transform:translateY(-5px); box-shadow:0 1px 2px rgba(17,17,19,.05), 0 36px 70px -34px rgba(17,17,19,.45); }
 .sw-card.feat{ box-shadow:0 0 0 1.5px var(--gold), 0 24px 52px -28px rgba(154,47,198,.42); border-color:transparent; }
 
 .sw-media{ position:relative; width:100%; height:var(--swH); background:var(--bone-2); overflow:hidden; }
-.sw-media iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff; opacity:0; transition:opacity .6s var(--ease); }
+/* base = mobile/native layout; desktop scaling (wide viewport, scaled down) is applied in JS via fitFrame() */
+.sw-media iframe{ position:absolute; top:0; left:0; width:100%; height:100%; border:0; background:#fff; opacity:0; transform-origin:top left; transition:opacity .55s var(--ease); }
 .sw-media iframe.loaded{ opacity:1; }
 .sw-skel{ position:absolute; inset:0; background:var(--bone-2); overflow:hidden; z-index:1; }
 .sw-skel::after{ content:""; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent); animation:swsh 1.6s infinite; }
@@ -768,7 +770,7 @@ footer .wrap{ display:block; }
   :root{ --swH:64vh; }
   .sw-stagehead .sw-nav, .sw-rail{ display:none; }
   .sw-track{ flex-direction:column; gap:20px; overflow:visible; scroll-snap-type:none; cursor:default; padding:6px 0 4px; margin:0; }
-  .sw-card{ width:100%; scroll-snap-align:none; }
+  .sw-card{ width:100%; scroll-snap-align:none; contain-intrinsic-size:360px 64vh; }
   .sw-media{ min-height:420px; }
   .sw-stagehead{ justify-content:center; }
   .sw-count{ text-align:center; }
@@ -918,8 +920,7 @@ footer .wrap{ display:block; }
   <div class="wrap">
     <div class="shead reveal">
       <p class="label"><span class="rule-gold"></span> 01 — Selected work</p>
-      <h2 class="disp">Live sites we&rsquo;ve <em class="em">built</em>.</h2>
-      <p class="sub">Every frame below is the real, working website &mdash; animating as it loads, just as a visitor sees it. Scroll inside any frame to explore, or filter by industry to find work like yours.</p>
+      <h2 class="disp">Meet your <em class="em">Clients</em></h2>
     </div>
 
     <div class="sw-filterwrap">
@@ -1217,16 +1218,12 @@ footer .wrap{ display:block; }
   ];
   var SITES = [
     {brand:"ADDRESSBALI", industry:"realestate", tag:"Luxury beachfront real estate · Bali", url:"https://www.addressbali.com", feat:true},
-    {brand:"Husband Retail", industry:"realestate", tag:"Retail real-estate consultancy", url:"https://digitalmovementuk.github.io/husband-retail/"},
     {brand:"Cunos Consulting", industry:"finance", tag:"Senior finance support · London", url:"https://cunos.co.uk"},
     {brand:"Finarch Global", industry:"finance", tag:"Investment-tech transformation", url:"https://digitalmovementuk.github.io/finarch-landing/"},
-    {brand:"CX", industry:"finance", tag:"Process & digitalisation consulting", url:"https://digitalmovementuk.github.io/cx/"},
-    {brand:"IMAP", industry:"finance", tag:"Change management & org development", url:"https://digitalmovementuk.github.io/imap-landing-page/"},
-    {brand:"Ratiobox", industry:"finance", tag:"Accounting, bookkeeping & payroll", url:"sites/ratiobox/"},
+    {brand:"CX", industry:"finance", tag:"Process & digitalisation consulting", url:"sites/cx/"},
     {brand:"Pentadoc AG", industry:"insurance", tag:"Digital transformation for insurers", url:"https://digitalmovementuk.github.io/Pentadoc-Prototype/"},
     {brand:"AEXIS", industry:"insurance", tag:"AI-era cyber assurance", url:"https://digitalmovementuk.github.io/aexis/"},
-    {brand:"Puriva", industry:"health", tag:"Aesthetic & lifestyle clinic", url:"https://digitalmovementuk.github.io/puriva/"},
-    {brand:"Digital Praxis", industry:"health", tag:"Dental practice marketing", url:"https://digitalmovementuk.github.io/digitalpraxis.io/"},
+    {brand:"Puriva", industry:"health", tag:"Aesthetic & lifestyle clinic · Bali", url:"https://digitalmovementuk.github.io/puriva/homepage/v1/"},
     {brand:"Re;mind", industry:"health", tag:"Mental health therapies", url:"https://digitalmovementuk.github.io/remind-v2/"},
     {brand:"Fantastic Finish", industry:"home", tag:"Window cleaning · Fareham", url:"https://digitalmovementuk.github.io/fantastic_finish/"},
     {brand:"Cheshire Conservatory Roofs", industry:"home", tag:"Conservatory roof replacement", url:"https://digitalmovementuk.github.io/cheshire_conservatory_roofs/"},
@@ -1271,6 +1268,25 @@ footer .wrap{ display:block; }
   });
   var cards = [].slice.call(track.children);
 
+  /* ---- desktop = real DESKTOP layout (wide viewport rendered, then scaled to fit the card);
+          mobile = native MOBILE layout (full-width iframe, no scaling) ---- */
+  var DTOP_W = 1180;                       // logical px width the embedded site renders at on desktop
+  function isDesktop(){ return window.innerWidth > 760; }
+  function fitFrame(f){
+    var media = f.parentNode; if(!media) return;
+    if(isDesktop()){
+      var W = media.clientWidth, H = media.clientHeight;
+      if(!W || !H) return;                 // not laid out yet — refit happens on load/resize
+      var sc = W / DTOP_W;
+      f.style.width  = DTOP_W + 'px';
+      f.style.height = Math.ceil(H / sc) + 'px';
+      f.style.transform = 'scale(' + sc + ')';
+    } else {
+      f.style.width = '100%'; f.style.height = '100%'; f.style.transform = 'none';
+    }
+  }
+  function refitAll(){ cards.forEach(function(c){ var f=c.querySelector('iframe'); if(f) fitFrame(f); }); }
+
   function activate(media){
     if(!media || media.getAttribute('data-loaded')) return;
     media.setAttribute('data-loaded','1');
@@ -1280,17 +1296,37 @@ footer .wrap{ display:block; }
     f.setAttribute('referrerpolicy','no-referrer-when-downgrade');
     f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock');
     f.setAttribute('title', media.parentNode.querySelector('.b').textContent + ' — live website preview');
-    f.addEventListener('load', function(){ f.classList.add('loaded'); media.classList.add('loaded'); });
-    f.src = media.getAttribute('data-src');
+    f.addEventListener('load', function(){ f.classList.add('loaded'); media.classList.add('loaded'); fitFrame(f); });
     media.appendChild(f);
+    fitFrame(f);
+    f.src = media.getAttribute('data-src');
+  }
+  function deactivate(media){
+    if(!media || !media.getAttribute('data-loaded')) return;
+    media.removeAttribute('data-loaded');
+    media.classList.remove('loaded');           // skeleton shows again
+    var f = media.querySelector('iframe'); if(f) f.remove();
   }
 
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('in'); activate(e.target.querySelector('.sw-media')); }
+  /* ---- smoothness: only keep a few live previews mounted at once ----
+     mount a card as it nears the viewport; unmount it once it is far away.
+     hysteresis (near 520/360 vs far 1500/1200) stops reload-thrash at the edges. */
+  function near(c, px, py){
+    if(c.style.display==='none') return false;
+    var r=c.getBoundingClientRect();
+    return r.right>-px && r.left<window.innerWidth+px && r.bottom>-py && r.top<window.innerHeight+py;
+  }
+  function manage(){
+    cards.forEach(function(c){
+      var m=c.querySelector('.sw-media');
+      if(near(c,520,360)){ c.classList.add('in'); activate(m); }
+      else if(!near(c,1500,1200)){ deactivate(m); }
     });
-  }, { root:null, rootMargin:'200px 700px', threshold:0.04 });
-  cards.forEach(function(c){ io.observe(c); });
+  }
+  var ticking=false;
+  function schedule(){ if(ticking) return; ticking=true; requestAnimationFrame(function(){ manage(); ticking=false; }); }
+  track.addEventListener('scroll', schedule, {passive:true});
+  window.addEventListener('scroll', schedule, {passive:true});
 
   /* ---- filter chips ---- */
   var activeKey = 'all';
@@ -1314,11 +1350,12 @@ footer .wrap{ display:block; }
     cards.forEach(function(c){
       var match = key==='all' || c.getAttribute('data-industry')===key;
       c.style.display = match ? '' : 'none';
-      if(match){ shown++; activate(c.querySelector('.sw-media')); requestAnimationFrame(function(){ c.classList.add('in'); }); }
+      if(match){ shown++; }
     });
     countEl.innerHTML = '<b>'+shown+'</b> '+(shown===1?'site':'sites')+(key==='all'?'':' in '+labelOf[key]);
     emptyEl.style.display = shown ? 'none' : 'block';
     track.scrollTo({left:0, behavior:'auto'});
+    manage();                 // mount the now-visible previews, unmount the hidden ones
     updateRail();
     if(btn){ btn.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'}); }
   }
@@ -1359,8 +1396,15 @@ footer .wrap{ display:block; }
   window.addEventListener('pointerup', function(){ if(down){ down=false; track.classList.remove('dragging'); } });
 
   applyFilter('all', filter.querySelector('.sw-chip'));
-  window.addEventListener('resize', updateRail);
-  setTimeout(updateRail, 400);
+  var rzT;
+  window.addEventListener('resize', function(){
+    refitAll();                                  // switch desktop⇄mobile preview format on breakpoint cross
+    manage();
+    updateRail();
+    clearTimeout(rzT); rzT=setTimeout(function(){ refitAll(); manage(); }, 220);
+  });
+  manage();
+  setTimeout(function(){ manage(); refitAll(); updateRail(); }, 400);
 })();
 </script>
 </body>
