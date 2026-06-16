@@ -766,27 +766,36 @@ footer .wrap{ display:block; }
 .sw-empty{ display:none; padding:48px 0 16px; text-align:center; color:var(--ink-faint); }
 
 @media(max-width:760px){
+  html{ scroll-snap-type:y proximity; }
   .sw-stagehead .sw-nav, .sw-rail{ display:none; }
-  /* horizontal swipe slider — one full iPhone + a peek of the next (like desktop) */
-  .sw-track{ flex-direction:row; gap:20px; overflow-x:auto; overflow-y:visible; scroll-snap-type:x mandatory; scroll-behavior:smooth; cursor:default; padding:8px 0 14px; margin:0; }
+  /* whole showroom fits ONE mobile viewport (same as desktop) */
+  .sw-section{ scroll-snap-align:start; scroll-snap-stop:always; height:100svh; padding-block:0; overflow:hidden; }
+  .sw-section > .wrap{ padding-block:54px 8px; }
+  .sw-section .shead{ margin-bottom:5px; }
+  .sw-section .shead .disp{ font-size:clamp(26px,8vw,38px); line-height:1.04; margin:3px 0 0; }
+  .sw-section .shead .label{ margin:0; }
+  .sw-section .sw-filterwrap{ position:static; margin:4px 0 0; padding:6px 0; }
+  .sw-section .sw-stagehead{ margin:6px 0 5px; justify-content:center; }
+  .sw-count{ text-align:center; }
+  /* horizontal swipe slider — one full iPhone + a peek of the next */
+  .sw-track{ flex-direction:row; gap:20px; overflow-x:auto; overflow-y:visible; scroll-snap-type:x mandatory; scroll-behavior:smooth; cursor:default; padding:6px 0 6px; margin:0; }
   .sw-card{ width:auto; scroll-snap-align:center; background:transparent; border:0; border-radius:0; overflow:visible; box-shadow:none; contain-intrinsic-size:auto; content-visibility:visible; }
   .sw-card:hover{ transform:none; box-shadow:none; }
   .sw-section .sw-card{ box-shadow:none; }
-  /* iPhone 17 Pro Max — silver titanium device */
+  /* iPhone 17 Pro Max — silver titanium device, sized so the section fits one viewport */
   .sw-media{
-    position:relative; height:min(70vh,700px); width:calc(min(70vh,700px) * 0.462); aspect-ratio:auto; min-height:0;
-    padding:11px; border-radius:56px; overflow:visible;
+    --ip:min(calc(100svh - 300px), 600px);
+    position:relative; height:var(--ip); width:calc(var(--ip) * 0.462); min-height:0;
+    padding:10px; border-radius:52px; overflow:visible;
     background:linear-gradient(135deg,#f4f5f7 0%,#ccced3 20%,#eef0f2 40%,#bbbfc6 58%,#e6e8eb 78%,#c6cacf 100%);
-    box-shadow:0 0 0 1px rgba(0,0,0,.22), inset 0 1px 1px rgba(255,255,255,.95), inset 0 -2px 5px rgba(0,0,0,.28), 0 34px 60px -22px rgba(0,0,0,.8);
+    box-shadow:0 0 0 1px rgba(0,0,0,.22), inset 0 1px 1px rgba(255,255,255,.95), inset 0 -2px 5px rgba(0,0,0,.28), 0 30px 54px -22px rgba(0,0,0,.8);
   }
-  .sw-media::after{ content:""; position:absolute; inset:7px; border-radius:49px; background:#0a0a0c; z-index:0; }   /* black bezel ring */
-  .sw-media::before{ content:""; position:absolute; top:23px; left:50%; transform:translateX(-50%); width:31%; height:25px; background:#000; border-radius:14px; z-index:3; }   /* Dynamic Island */
-  .sw-media iframe{ position:absolute; inset:11px; top:11px; left:11px; width:auto; height:auto; border-radius:45px; background:#000; z-index:1; }
-  .sw-skel{ inset:11px; border-radius:45px; z-index:1; }
+  .sw-media::after{ content:""; position:absolute; inset:6px; border-radius:46px; background:#0a0a0c; z-index:0; }   /* black bezel ring */
+  .sw-media::before{ content:""; position:absolute; top:20px; left:50%; transform:translateX(-50%); width:31%; height:22px; background:#000; border-radius:13px; z-index:3; }   /* Dynamic Island */
+  .sw-media iframe{ position:absolute; inset:10px; top:10px; left:10px; width:auto; height:auto; border-radius:42px; background:#000; z-index:1; }
+  .sw-skel{ inset:10px; border-radius:42px; z-index:1; }
   .sw-hint{ display:none; }
-  .sw-foot{ justify-content:center; }
-  .sw-stagehead{ justify-content:center; }
-  .sw-count{ text-align:center; }
+  .sw-foot{ justify-content:center; padding:11px 0 0; }
 }
 @media (prefers-reduced-motion:reduce){
   .sw-skel::after, .sw-badge i, .sw-hint svg{ animation:none; }
