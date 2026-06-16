@@ -99,14 +99,16 @@ body.scrolled .frame{ opacity:1; }
   position:fixed; top:var(--mat); left:var(--mat); right:var(--mat);
   z-index:55; display:flex; align-items:center; justify-content:space-between;
   padding:22px clamp(18px,3.4vw,46px);
-  transition:background .6s var(--ease), box-shadow .6s var(--ease), padding .5s var(--ease);
+  opacity:0; pointer-events:none; transform:translateY(-14px);   /* hidden on first hero load */
+  transition:opacity .6s var(--ease), transform .6s var(--ease), background .6s var(--ease), box-shadow .6s var(--ease), padding .5s var(--ease);
 }
 .nav.scrolled{
-  background:rgba(243,239,232,0.82);
-  backdrop-filter:saturate(180%) blur(14px);
-  -webkit-backdrop-filter:saturate(180%) blur(14px);
-  box-shadow:0 1px 0 var(--line-soft);
-  padding-top:16px; padding-bottom:16px;
+  opacity:1; pointer-events:auto; transform:none;                 /* blends in gently on scroll */
+  background:rgba(250,251,253,0.46);                              /* white ice glass */
+  backdrop-filter:saturate(150%) blur(24px) brightness(1.04);
+  -webkit-backdrop-filter:saturate(150%) blur(24px) brightness(1.04);
+  box-shadow:none;
+  padding-top:14px; padding-bottom:14px;
 }
 .wordmark{
   font-family:"Jost", sans-serif; font-weight:400; font-size:15px;
@@ -893,8 +895,8 @@ footer .wrap{ display:block; }
 /* ============ NAV — full viewport width + glass that adapts to the section behind it ============ */
 .nav{ left:0; right:0; top:0; }
 .nav.scrolled{ box-shadow:none; }
-.nav.scrolled.nav--light{ background:rgba(243,239,232,.82); box-shadow:0 10px 30px -22px rgba(0,0,0,.4); }
-.nav.scrolled.nav--dark{ background:rgba(11,11,16,.66); box-shadow:0 10px 30px -22px rgba(0,0,0,.6); }
+.nav.scrolled.nav--light{ background:rgba(250,251,253,0.46); box-shadow:none; }   /* white ice glass */
+.nav.scrolled.nav--dark{ background:rgba(11,11,16,.6); box-shadow:none; }
 .nav.nav--dark .wordmark{ color:#fff; }
 .nav.nav--dark .nav-cta{ color:#fff; border-color:rgba(255,255,255,.6); }
 .nav.nav--dark .nav-cta:hover{ background:#fff; color:#111; }
@@ -1217,18 +1219,14 @@ footer .wrap{ display:block; }
   }
 
   // nav scrolled state + progress
-  var navSecs = document.querySelectorAll('[data-navtheme]');
   function onScroll(){
     var y = window.scrollY || document.documentElement.scrollTop;
-    nav.classList.toggle('scrolled', y > 24);
+    /* nav is hidden over the very top of the hero, then gently blends in once you scroll down */
+    var navOn = y > 96;
+    nav.classList.toggle('scrolled', navOn);
     document.body.classList.toggle('scrolled', y > 24);
-    /* adaptive glass: the bar CONTRASTS the section behind it for legibility —
-       dark section → light bar + dark text/icons; light section → dark bar + light text/icons */
-    var probe = 56, theme = 'dark';
-    for(var i=0;i<navSecs.length;i++){ var r=navSecs[i].getBoundingClientRect(); if(r.top<=probe && r.bottom>probe){ theme=navSecs[i].getAttribute('data-navtheme'); } }
-    var sc = y > 24;
-    nav.classList.toggle('nav--light', sc && theme==='dark');   /* dark bg → light glass bar */
-    nav.classList.toggle('nav--dark',  sc && theme==='light');  /* light bg → dark glass bar */
+    nav.classList.toggle('nav--light', navOn);   /* white ice-glass bar (every section is dark) */
+    nav.classList.remove('nav--dark');
     var h = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
   }
@@ -1377,7 +1375,7 @@ footer .wrap{ display:block; }
     {brand:"Fantastic Finish", industry:"home", tag:"Window cleaning · Fareham", url:"https://digitalmovementuk.github.io/fantastic_finish/"},
     {brand:"Cheshire Conservatory Roofs", industry:"home", tag:"Conservatory roof replacement", url:"https://digitalmovementuk.github.io/cheshire_conservatory_roofs/"},
     {brand:"Clearaway Services", industry:"home", tag:"Asbestos removal & strip-out", url:"https://digitalmovementuk.github.io/Clearaway-Services/"},
-    {brand:"AEXIS", industry:"insurance", tag:"AI-era cyber assurance", url:"https://digitalmovementuk.github.io/aexis/"},
+    {brand:"AEXIS", industry:"insurance", tag:"AI-era cyber assurance", url:"https://digitalmovementuk.github.io/aexis/homepage.html"},
     {brand:"Digital Movement UK", industry:"agency", tag:"Performance marketing · UK", url:"https://digitalmovementuk.github.io/DMUK_homepage_v3_apple/"},
     {brand:"Finarch Global", industry:"finance", tag:"Investment-tech transformation", url:"https://digitalmovementuk.github.io/finarch-landing/"},
     {brand:"Pentadoc AG", industry:"insurance", tag:"Digital transformation for insurers", url:"https://digitalmovementuk.github.io/Pentadoc-Prototype/"}
