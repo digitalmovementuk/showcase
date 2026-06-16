@@ -671,7 +671,7 @@ footer .wrap{ display:block; }
    SELECTED WORK — live website previews (showcase)
    Native to the DM Maison system (Jost / Inter / violet)
    ========================================================= */
-:root{ --swH:600px; }
+:root{ --swH: clamp(260px, calc(100svh - 412px), 520px); }   /* sized so the whole showroom fits one desktop viewport */
 .sw-section{ padding-block:clamp(64px,10vh,140px); }
 
 .sw-filterwrap{
@@ -725,7 +725,6 @@ footer .wrap{ display:block; }
   display:flex; flex-direction:column;
   opacity:0; transform:translateY(16px);
   transition:transform .5s var(--ease), box-shadow .4s var(--ease), opacity .55s var(--ease);
-  content-visibility:auto; contain-intrinsic-size:460px 700px;
 }
 .sw-card.in{ opacity:1; transform:none; }
 .sw-card:hover{ transform:translateY(-5px); box-shadow:0 1px 2px rgba(17,17,19,.05), 0 36px 70px -34px rgba(17,17,19,.45); }
@@ -767,11 +766,25 @@ footer .wrap{ display:block; }
 .sw-empty{ display:none; padding:48px 0 16px; text-align:center; color:var(--ink-faint); }
 
 @media(max-width:760px){
-  :root{ --swH:64vh; }
   .sw-stagehead .sw-nav, .sw-rail{ display:none; }
-  .sw-track{ flex-direction:column; gap:20px; overflow:visible; scroll-snap-type:none; cursor:default; padding:6px 0 4px; margin:0; }
-  .sw-card{ width:100%; scroll-snap-align:none; contain-intrinsic-size:360px 64vh; }
-  .sw-media{ min-height:420px; }
+  /* horizontal swipe slider — one full iPhone + a peek of the next (like desktop) */
+  .sw-track{ flex-direction:row; gap:20px; overflow-x:auto; overflow-y:visible; scroll-snap-type:x mandatory; scroll-behavior:smooth; cursor:default; padding:8px 0 14px; margin:0; }
+  .sw-card{ width:auto; scroll-snap-align:center; background:transparent; border:0; border-radius:0; overflow:visible; box-shadow:none; contain-intrinsic-size:auto; content-visibility:visible; }
+  .sw-card:hover{ transform:none; box-shadow:none; }
+  .sw-section .sw-card{ box-shadow:none; }
+  /* iPhone 17 Pro Max — silver titanium device */
+  .sw-media{
+    position:relative; height:min(70vh,700px); width:auto; aspect-ratio:9 / 19.5; min-height:0;
+    padding:11px; border-radius:56px; overflow:visible;
+    background:linear-gradient(135deg,#f4f5f7 0%,#ccced3 20%,#eef0f2 40%,#bbbfc6 58%,#e6e8eb 78%,#c6cacf 100%);
+    box-shadow:0 0 0 1px rgba(0,0,0,.22), inset 0 1px 1px rgba(255,255,255,.95), inset 0 -2px 5px rgba(0,0,0,.28), 0 34px 60px -22px rgba(0,0,0,.8);
+  }
+  .sw-media::after{ content:""; position:absolute; inset:7px; border-radius:49px; background:#0a0a0c; z-index:0; }   /* black bezel ring */
+  .sw-media::before{ content:""; position:absolute; top:23px; left:50%; transform:translateX(-50%); width:31%; height:25px; background:#000; border-radius:14px; z-index:3; }   /* Dynamic Island */
+  .sw-media iframe{ position:absolute; inset:11px; top:11px; left:11px; width:auto; height:auto; border-radius:45px; background:#000; z-index:1; }
+  .sw-skel{ inset:11px; border-radius:45px; z-index:1; }
+  .sw-hint{ display:none; }
+  .sw-foot{ justify-content:center; }
   .sw-stagehead{ justify-content:center; }
   .sw-count{ text-align:center; }
 }
@@ -844,6 +857,83 @@ footer .wrap{ display:block; }
 /* dark loading skeleton so it doesn't flash white in the dark room */
 .sw-section .sw-skel{ background:#141418; }
 .sw-section .sw-skel span{ color:rgba(255,255,255,.5); }
+
+/* ============ GOOGLE REVIEWS BELT — light glass running ticker ============ */
+.rvbelt{
+  position:relative; z-index:3;
+  background:linear-gradient(180deg,#fcf8f1,#f1ece1);
+  border-top:1px solid rgba(17,17,19,.07); border-bottom:1px solid rgba(17,17,19,.07);
+  padding:16px 0; overflow:hidden;
+  box-shadow:0 -34px 60px -46px rgba(0,0,0,.7), 0 34px 60px -46px rgba(0,0,0,.7);
+}
+.rvbelt__inner{ -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); }
+.rvbelt__track{ display:flex; gap:14px; width:max-content; will-change:transform; animation:rvscroll 46s linear infinite; }
+.rvbelt:hover .rvbelt__track{ animation-play-state:paused; }
+@keyframes rvscroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.rvchip{
+  flex:0 0 auto; display:inline-flex; align-items:center; gap:11px;
+  background:rgba(255,255,255,.74); backdrop-filter:saturate(170%) blur(10px); -webkit-backdrop-filter:saturate(170%) blur(10px);
+  border:1px solid rgba(17,17,19,.08); border-radius:999px; padding:10px 19px;
+  box-shadow:0 1px 2px rgba(17,17,19,.04), 0 16px 30px -24px rgba(17,17,19,.5);
+}
+.rvchip__g{ width:18px; height:18px; flex:0 0 auto; }
+.rvchip__medal{ width:18px; height:18px; flex:0 0 auto; }
+.rvchip__stars{ color:#f5a623; letter-spacing:1.5px; font-size:13px; }
+.rvchip__txt{ font-family:"Jost",sans-serif; font-weight:500; font-size:13.5px; color:var(--ink); letter-spacing:.01em; white-space:nowrap; }
+.rvchip__txt b{ font-weight:600; }
+.rvchip__sub{ color:var(--ink-faint); font-weight:400; }
+@media (prefers-reduced-motion:reduce){ .rvbelt__track{ animation:none; } }
+@media (max-width:760px){ .rvbelt__track{ animation-duration:30s; } .rvchip{ padding:9px 16px; } .rvchip__txt{ font-size:12.5px; } }
+
+/* ============ SHOWROOM reveal — heading appears only when the section is fully entered; previews then blend in ============ */
+.sw-section .shead{ opacity:0; transform:translateY(20px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.sw-section.revealed .shead{ opacity:1; transform:none; }
+.sw-section .sw-filterwrap, .sw-section .sw-stagehead, .sw-section .sw-track{ opacity:0; transition:opacity .7s var(--ease) .12s; }
+.sw-section.revealed .sw-filterwrap, .sw-section.revealed .sw-stagehead, .sw-section.revealed .sw-track{ opacity:1; }
+/* strong scroll lock + the whole showroom fits ONE desktop viewport (iframes sized to fit) */
+@media (min-width:761px){
+  html{ scroll-snap-type:y mandatory; }
+  .hero, footer{ scroll-snap-align:start; }
+  .sw-section{
+    scroll-snap-align:start; scroll-snap-stop:always;
+    height:100svh; min-height:600px; padding-block:0; overflow:hidden;
+  }
+  .sw-section > .wrap{ padding-block:74px 16px; }
+  /* compact vertical rhythm so heading + filter + slider all fit one screen */
+  .sw-section .shead{ margin-bottom:8px; }
+  .sw-section .shead .disp{ font-size:clamp(30px,3.6vw,44px); line-height:1.04; margin:5px 0 0; }
+  .sw-section .shead .label{ margin:0; }
+  .sw-section .sw-filterwrap{ position:static; margin:6px 0 0; padding:8px 0; }
+  .sw-section .sw-stagehead{ margin:9px 0 7px; }
+  .sw-section .sw-track{ padding:6px 0 6px; }
+}
+
+/* ============ NAV — full viewport width + glass that adapts to the section behind it ============ */
+.nav{ left:0; right:0; top:0; }
+.nav.scrolled{ box-shadow:none; }
+.nav.scrolled.nav--light{ background:rgba(243,239,232,.82); box-shadow:0 10px 30px -22px rgba(0,0,0,.4); }
+.nav.scrolled.nav--dark{ background:rgba(11,11,16,.66); box-shadow:0 10px 30px -22px rgba(0,0,0,.6); }
+.nav.nav--dark .wordmark{ color:#fff; }
+.nav.nav--dark .nav-cta{ color:#fff; border-color:rgba(255,255,255,.6); }
+.nav.nav--dark .nav-cta:hover{ background:#fff; color:#111; }
+.nav.nav--dark .burger span{ background:#fff; }
+.nav.nav--dark .nav-links a{ color:rgba(255,255,255,.82); }
+.nav.nav--dark .nav-links a:hover{ color:#fff; }
+.nav.nav--dark .nav-social{ color:#fff; }
+.nav.nav--light .nav-social{ color:var(--ink); }
+.nav.nav--light .wordmark{ color:var(--ink); }
+.nav.nav--light .nav-cta{ color:var(--ink); border-color:var(--ink); }
+.nav.nav--light .nav-cta:hover{ background:var(--ink); color:var(--bone); }
+.nav.nav--light .burger span{ background:var(--ink); }
+.nav.nav--light .nav-links a{ color:var(--ink-soft); }
+.nav.nav--dark .brandlogo--neg{ display:block; } .nav.nav--dark .brandlogo--pos{ display:none; }
+.nav.nav--light .brandlogo--neg{ display:none; } .nav.nav--light .brandlogo--pos{ display:block; }
+
+/* ============ HERO — Digital Reference statement quote (legible over the video) ============ */
+.hero-quote{ margin:16px auto 2px; max-width:600px; text-align:center; }
+.hero-quote p{ font-family:"Jost",sans-serif; font-weight:300; font-style:italic; font-size:clamp(14px,1.4vw,17.5px); line-height:1.5; color:#fff; text-shadow:0 1px 18px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.3); margin:0; }
+.hero-quote cite{ display:block; margin-top:9px; font-family:"Jost",sans-serif; font-style:normal; font-weight:500; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.74); text-shadow:0 1px 10px rgba(0,0,0,.5); }
+@media(max-width:760px){ .hero-quote{ max-width:90%; } .hero-quote p{ font-size:14px; } }
 </style>
 </head>
 <body class="intro-lock">
@@ -877,7 +967,7 @@ footer .wrap{ display:block; }
 </div>
 
 <!-- ===================== HERO ===================== -->
-<header class="hero" id="top">
+<header class="hero" id="top" data-navtheme="dark">
   <div class="hero-bg" id="heroBg" aria-hidden="true">
     <div class="hero-slides" id="heroSlides">
       <div class="hero-slide is-active" data-i="0">
@@ -915,10 +1005,6 @@ footer .wrap{ display:block; }
       <span class="line"><span><em class="em">Digital</em> Agency</span></span>
     </h1>
 
-    <p class="lead">
-      A London studio for considered websites and quiet, lasting growth.
-    </p>
-
     <div class="hero-trust" id="heroTrust">
       <a class="hero-google" href="https://www.google.com/search?q=Digital+Movement+Melbourne+Reviews" target="_blank" rel="noopener" aria-label="Rated 5.0 on Google — read reviews">
         <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47a5.53 5.53 0 0 1-2.4 3.58v3h3.87c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.08 7.94-2.91l-3.87-3a7.2 7.2 0 0 1-10.73-3.78H1.34v3.09A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.34 14.31a7.2 7.2 0 0 1 0-4.62V6.6H1.34a12 12 0 0 0 0 10.8l4-3.09z"/><path fill="#EA4335" d="M12 4.77c1.77 0 3.35.61 4.6 1.8l3.42-3.42A11.97 11.97 0 0 0 1.34 6.6l4 3.09A7.2 7.2 0 0 1 12 4.77z"/></svg>
@@ -926,6 +1012,11 @@ footer .wrap{ display:block; }
         <span class="hero-google__txt">5.0 on Google · 100+ reviews</span>
       </a>
     </div>
+
+    <blockquote class="hero-quote" id="heroQuote">
+      <p>&ldquo;Digital Movement lives up to its name by helping brands gain real momentum through SEO, content, and inbound strategy.&rdquo;</p>
+      <cite>&mdash; Digital Reference, 2026</cite>
+    </blockquote>
 
     <div class="hero-actions">
       <form class="audit-form" id="auditForm" novalidate>
@@ -980,8 +1071,22 @@ footer .wrap{ display:block; }
   </div>
 </header>
 
+<!-- ===================== GOOGLE REVIEWS BELT — light glass, separates hero ↔ showroom ===================== -->
+<section class="rvbelt" data-navtheme="light" aria-label="Digital Movement — 5.0 on Google from 102 reviews">
+  <div class="rvbelt__inner">
+    <div class="rvbelt__track" id="rvTrack">
+      <span class="rvchip"><svg class="rvchip__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 44 31 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg><span class="rvchip__txt"><b>Google Reviews</b></span><span class="rvchip__stars" aria-hidden="true">★★★★★</span></span>
+      <span class="rvchip"><span class="rvchip__stars" aria-hidden="true">★★★★★</span><span class="rvchip__txt"><b>5.0</b> <span class="rvchip__sub">rating on Google</span></span></span>
+      <span class="rvchip"><span class="rvchip__txt"><b>102</b> <span class="rvchip__sub">verified Google reviews</span></span></span>
+      <span class="rvchip"><svg class="rvchip__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 44 31 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg><span class="rvchip__txt"><b>5.0&nbsp;/&nbsp;5.0</b> <span class="rvchip__sub">average rating</span></span></span>
+      <span class="rvchip"><svg class="rvchip__medal" viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="5.5"/><path d="M8.4 13.2 6.8 21l5.2-2.9 5.2 2.9-1.6-7.8"/></svg><span class="rvchip__txt"><b>Best Digital Marketing Agency in Australia</b> <span class="rvchip__sub">· 2026</span></span></span>
+      <span class="rvchip"><span class="rvchip__stars" aria-hidden="true">★★★★★</span><span class="rvchip__txt"><span class="rvchip__sub">Awarded by</span> <b>Digital&nbsp;Reference</b></span></span>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== SELECTED WORK — LIVE PREVIEWS (Section 1) ===================== -->
-<section id="work" class="section-pad sw-section">
+<section id="work" class="section-pad sw-section" data-navtheme="dark">
   <div class="wrap">
     <div class="shead reveal">
       <p class="label"><span class="rule-gold"></span> 01 — Selected work</p>
@@ -1007,7 +1112,7 @@ footer .wrap{ display:block; }
 </section>
 
 <!-- ===================== FOOTER ===================== -->
-<footer>
+<footer data-navtheme="dark">
   <div class="wrap">
     <img src="assets/brand/logo-color-negative.svg" alt="Digital Movement" class="foot-logo" />
     <div class="foot-cols">
@@ -1143,10 +1248,18 @@ footer .wrap{ display:block; }
   }
 
   // nav scrolled state + progress
+  var navSecs = document.querySelectorAll('[data-navtheme]');
   function onScroll(){
     var y = window.scrollY || document.documentElement.scrollTop;
     nav.classList.toggle('scrolled', y > 24);
     document.body.classList.toggle('scrolled', y > 24);
+    /* adaptive glass: the bar CONTRASTS the section behind it for legibility —
+       dark section → light bar + dark text/icons; light section → dark bar + light text/icons */
+    var probe = 56, theme = 'dark';
+    for(var i=0;i<navSecs.length;i++){ var r=navSecs[i].getBoundingClientRect(); if(r.top<=probe && r.bottom>probe){ theme=navSecs[i].getAttribute('data-navtheme'); } }
+    var sc = y > 24;
+    nav.classList.toggle('nav--light', sc && theme==='dark');   /* dark bg → light glass bar */
+    nav.classList.toggle('nav--dark',  sc && theme==='light');  /* light bg → dark glass bar */
     var h = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
   }
@@ -1321,7 +1434,6 @@ footer .wrap{ display:block; }
     card.innerHTML =
       '<div class="sw-media" data-src="'+s.url+'">'+
         '<div class="sw-skel"><span>Loading live site&hellip;</span></div>'+
-        '<span class="sw-badge"><i></i>Live site</span>'+
         '<span class="sw-hint">'+SCROLLICON+'Scroll to explore</span>'+
       '</div>'+
       '<div class="sw-foot">'+
@@ -1334,6 +1446,19 @@ footer .wrap{ display:block; }
     track.appendChild(card);
   });
   var cards = [].slice.call(track.children);
+
+  /* reviews belt: duplicate the chip set once so the marquee loops seamlessly at translateX(-50%) */
+  var rvt = document.getElementById('rvTrack');
+  if(rvt){ rvt.innerHTML += rvt.innerHTML; }
+
+  /* showroom reveal: heading + controls + previews only appear once the section is fully entered */
+  var swSection = document.getElementById('work'), sectionRevealed = false;
+  function checkReveal(){
+    if(sectionRevealed || !swSection) return;
+    if(swSection.getBoundingClientRect().top <= window.innerHeight * 0.42){
+      sectionRevealed = true; swSection.classList.add('revealed');
+    }
+  }
 
   /* ---- desktop = real DESKTOP layout (wide viewport rendered, then scaled to fit the card);
           mobile = native MOBILE layout (full-width iframe, no scaling) ---- */
@@ -1349,7 +1474,8 @@ footer .wrap{ display:block; }
       f.style.height = Math.ceil(H / sc) + 'px';
       f.style.transform = 'scale(' + sc + ')';
     } else {
-      f.style.width = '100%'; f.style.height = '100%'; f.style.transform = 'none';
+      /* mobile: the iPhone-screen sizing is controlled by CSS (iframe inset inside the device frame) */
+      f.style.width=''; f.style.height=''; f.style.top=''; f.style.left=''; f.style.transform='none';
     }
   }
   function refitAll(){ cards.forEach(function(c){ var f=c.querySelector('iframe'); if(f) fitFrame(f); }); }
@@ -1396,9 +1522,10 @@ footer .wrap{ display:block; }
     return r.right>-px && r.left<window.innerWidth+px && r.bottom>-py && r.top<window.innerHeight+py;
   }
   function manage(){
+    checkReveal();
     cards.forEach(function(c){
       var m=c.querySelector('.sw-media');
-      if(near(c,520,360)){ c.classList.add('in'); activate(m); }
+      if(near(c,520,360)){ if(sectionRevealed){ c.classList.add('in'); } activate(m); }
       else if(!near(c,1500,1200)){ deactivate(m); }
     });
   }
