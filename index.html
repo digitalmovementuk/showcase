@@ -710,7 +710,7 @@ footer .wrap{ display:block; }
 
 .sw-track{
   display:flex; gap:clamp(16px,2vw,26px);
-  padding:6px var(--gutter) 26px; margin:0 calc(-1 * var(--gutter));
+  padding:8px 0 30px; margin:0;
   overflow-x:auto; overflow-y:visible;
   scroll-snap-type:x mandatory; scroll-behavior:smooth;
   scrollbar-width:none; -webkit-overflow-scrolling:touch; cursor:grab;
@@ -719,7 +719,7 @@ footer .wrap{ display:block; }
 .sw-track.dragging{ cursor:grabbing; scroll-behavior:auto; scroll-snap-type:none; }
 
 .sw-card{
-  flex:0 0 auto; width:clamp(360px,40vw,460px); scroll-snap-align:center;
+  flex:0 0 auto; width:clamp(360px,40vw,460px); scroll-snap-align:start;
   background:var(--paper); border:1px solid var(--line); border-radius:20px; overflow:hidden;
   box-shadow:0 1px 2px rgba(17,17,19,.04), 0 24px 50px -30px rgba(17,17,19,.34);
   display:flex; flex-direction:column;
@@ -779,6 +779,71 @@ footer .wrap{ display:block; }
   .sw-skel::after, .sw-badge i, .sw-hint svg{ animation:none; }
   .sw-track{ scroll-behavior:auto; }
 }
+
+/* ============ SHOWROOM — dark gallery + spotlight on the previews ============ */
+.sw-section{
+  position:relative; isolation:isolate;
+  background:
+    radial-gradient(120% 62% at 50% -10%, rgba(154,47,198,.20), transparent 58%),
+    radial-gradient(70% 46% at 50% 4%, rgba(255,248,238,.12), transparent 56%),
+    linear-gradient(180deg,#0c0c11 0%, #08080b 58%, #0b0b10 100%);
+  color:#f3f3f6;
+}
+.sw-section::before{   /* overhead spotlight pool */
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(54% 40% at 50% 10%, rgba(255,248,236,.18), rgba(255,248,236,.05) 42%, transparent 70%);
+  mix-blend-mode:screen;
+}
+.sw-section::after{    /* room vignette to focus the light centre-stage */
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  box-shadow:inset 0 -140px 170px -70px rgba(0,0,0,.92), inset 0 0 240px 70px rgba(0,0,0,.5);
+}
+.sw-section > .wrap{ position:relative; z-index:1; }
+
+/* heading on dark */
+.sw-section .label{ color:rgba(255,255,255,.6); }
+.sw-section .disp{ color:#fff; }
+.sw-section .sub{ color:rgba(255,255,255,.58); }
+
+/* sticky filter — dark glass */
+.sw-section .sw-filterwrap{
+  background:rgba(11,11,16,.72);
+  border-top:1px solid rgba(255,255,255,.09); border-bottom:1px solid rgba(255,255,255,.09);
+}
+.sw-section .sw-chip{ color:rgba(255,255,255,.72); background:rgba(255,255,255,.045); border-color:rgba(255,255,255,.15); }
+.sw-section .sw-chip:hover{ color:#fff; border-color:rgba(255,255,255,.55); }
+.sw-section .sw-chip[aria-pressed="true"]{ color:#0b0b0e; background:#fff; border-color:#fff; }
+.sw-section .sw-count{ color:rgba(255,255,255,.55); }
+.sw-section .sw-count b{ color:#fff; }
+.sw-section .sw-nav button{ background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.16); color:#fff; }
+.sw-section .sw-nav button:hover:not(:disabled){ background:#fff; color:#0b0b0e; border-color:#fff; }
+.sw-section .sw-rail{ background:rgba(255,255,255,.12); }
+.sw-section .sw-empty{ color:rgba(255,255,255,.5); }
+
+/* each preview lit like an exhibit under a spotlight */
+.sw-section .sw-card{
+  border-color:rgba(255,255,255,.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.05),
+    0 42px 90px -30px rgba(0,0,0,.92),
+    0 14px 46px -18px rgba(0,0,0,.7),
+    0 0 72px -14px rgba(255,247,235,.12);
+}
+.sw-section .sw-card:hover{
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.12),
+    0 52px 110px -28px rgba(0,0,0,.95),
+    0 0 96px -10px rgba(255,247,235,.20);
+}
+.sw-section .sw-card.feat{
+  box-shadow:
+    0 0 0 1.5px var(--gold),
+    0 44px 100px -28px rgba(154,47,198,.5),
+    0 0 96px -8px rgba(154,47,198,.30);
+}
+/* dark loading skeleton so it doesn't flash white in the dark room */
+.sw-section .sw-skel{ background:#141418; }
+.sw-section .sw-skel span{ color:rgba(255,255,255,.5); }
 </style>
 </head>
 <body class="intro-lock">
@@ -1217,21 +1282,23 @@ footer .wrap{ display:block; }
     {key:"agency",     label:"Agency & Creative"}
   ];
   var SITES = [
+    /* curated lead order */
     {brand:"ADDRESSBALI", industry:"realestate", tag:"Luxury beachfront real estate · Bali", url:"https://www.addressbali.com", feat:true},
     {brand:"Cunos Consulting", industry:"finance", tag:"Senior finance support · London", url:"https://cunos.co.uk"},
-    {brand:"Finarch Global", industry:"finance", tag:"Investment-tech transformation", url:"https://digitalmovementuk.github.io/finarch-landing/"},
-    {brand:"CX", industry:"finance", tag:"Process & digitalisation consulting", url:"sites/cx/"},
-    {brand:"Pentadoc AG", industry:"insurance", tag:"Digital transformation for insurers", url:"https://digitalmovementuk.github.io/Pentadoc-Prototype/"},
-    {brand:"AEXIS", industry:"insurance", tag:"AI-era cyber assurance", url:"https://digitalmovementuk.github.io/aexis/"},
+    {brand:"NEO THE AGENCY", industry:"agency", tag:"Creative & SEO agency · Berlin", url:"https://www.neotheagency.de"},
+    {brand:"Vanguard", industry:"agency", tag:"World-class digital collective", url:"https://digitalmovementuk.github.io/vanguard-hero/"},
     {brand:"Puriva", industry:"health", tag:"Aesthetic & lifestyle clinic · Bali", url:"https://digitalmovementuk.github.io/puriva/homepage/v1/"},
+    {brand:"CX", industry:"finance", tag:"Process & digitalisation consulting", url:"sites/cx/"},
     {brand:"Re;mind", industry:"health", tag:"Mental health therapies", url:"https://digitalmovementuk.github.io/remind-v2/"},
+    {brand:"Digital Movement NZ", industry:"agency", tag:"Performance marketing · New Zealand", url:"https://www.digitalmovement.co.nz"},
+    /* tail — animated heroes, trades grouped, static heroes last */
     {brand:"Fantastic Finish", industry:"home", tag:"Window cleaning · Fareham", url:"https://digitalmovementuk.github.io/fantastic_finish/"},
     {brand:"Cheshire Conservatory Roofs", industry:"home", tag:"Conservatory roof replacement", url:"https://digitalmovementuk.github.io/cheshire_conservatory_roofs/"},
     {brand:"Clearaway Services", industry:"home", tag:"Asbestos removal & strip-out", url:"https://digitalmovementuk.github.io/Clearaway-Services/"},
-    {brand:"NEO THE AGENCY", industry:"agency", tag:"Creative & SEO agency · Berlin", url:"https://www.neotheagency.de"},
-    {brand:"Vanguard", industry:"agency", tag:"World-class digital collective", url:"https://digitalmovementuk.github.io/vanguard-hero/"},
+    {brand:"AEXIS", industry:"insurance", tag:"AI-era cyber assurance", url:"https://digitalmovementuk.github.io/aexis/"},
     {brand:"Digital Movement UK", industry:"agency", tag:"Performance marketing · UK", url:"https://digitalmovementuk.github.io/DMUK_homepage_v3_apple/"},
-    {brand:"Digital Movement NZ", industry:"agency", tag:"Performance marketing · New Zealand", url:"https://www.digitalmovement.co.nz"}
+    {brand:"Finarch Global", industry:"finance", tag:"Investment-tech transformation", url:"https://digitalmovementuk.github.io/finarch-landing/"},
+    {brand:"Pentadoc AG", industry:"insurance", tag:"Digital transformation for insurers", url:"https://digitalmovementuk.github.io/Pentadoc-Prototype/"}
   ];
 
   var track  = document.getElementById('swTrack');
@@ -1296,7 +1363,19 @@ footer .wrap{ display:block; }
     f.setAttribute('referrerpolicy','no-referrer-when-downgrade');
     f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock');
     f.setAttribute('title', media.parentNode.querySelector('.b').textContent + ' — live website preview');
-    f.addEventListener('load', function(){ f.classList.add('loaded'); media.classList.add('loaded'); fitFrame(f); });
+    f.addEventListener('load', function(){
+      f.classList.add('loaded'); media.classList.add('loaded'); fitFrame(f);
+      /* same-origin previews: strip cookie/consent popups so the hero shows clean (live client sites untouched) */
+      try{
+        var d=f.contentDocument;
+        if(d && d.head){
+          var sel='.consent-root,.consent-backdrop,.cookie-banner,.cookie-consent,#cookie-consent,#cookieConsent,.cc-window,.cmplz-cookiebanner,[class*="cookie-banner"],[id*="cookie-consent"]';
+          var css=sel+'{display:none!important;visibility:hidden!important;}';
+          if(d.querySelector(sel)) css+='html,body{overflow:auto!important;}';
+          var st=d.createElement('style'); st.textContent=css; d.head.appendChild(st);
+        }
+      }catch(e){/* cross-origin frame — nothing to clean */}
+    });
     media.appendChild(f);
     fitFrame(f);
     f.src = media.getAttribute('data-src');
@@ -1355,16 +1434,26 @@ footer .wrap{ display:block; }
     countEl.innerHTML = '<b>'+shown+'</b> '+(shown===1?'site':'sites')+(key==='all'?'':' in '+labelOf[key]);
     emptyEl.style.display = shown ? 'none' : 'block';
     track.scrollTo({left:0, behavior:'auto'});
+    layoutCards();            // re-tile so the visible set is whole cards only
     manage();                 // mount the now-visible previews, unmount the hidden ones
     updateRail();
     if(btn){ btn.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'}); }
   }
 
   /* ---- slider controls ---- */
+  function gapPx(){ return parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 20; }
+  /* even-tiling: size cards so a whole number fit the track exactly — no card is ever partly visible */
+  function layoutCards(){
+    if(!isDesktop()){ cards.forEach(function(c){ c.style.width=''; }); return; }
+    var gap = gapPx();
+    var tw  = track.clientWidth;
+    var N   = Math.max(1, Math.min(4, Math.round(tw / 480)));   // ~2–3 full desktop previews per view
+    var cw  = Math.floor((tw - (N-1)*gap) / N);
+    cards.forEach(function(c){ c.style.width = cw + 'px'; });
+  }
   function step(){
     var first = cards.filter(function(c){return c.style.display!=='none';})[0];
-    var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 22;
-    return first ? first.getBoundingClientRect().width + gap : 360;
+    return first ? first.getBoundingClientRect().width + gapPx() : 360;
   }
   prev.addEventListener('click', function(){ track.scrollBy({left:-step(), behavior:'smooth'}); });
   next.addEventListener('click', function(){ track.scrollBy({left: step(), behavior:'smooth'}); });
@@ -1395,13 +1484,15 @@ footer .wrap{ display:block; }
   window.addEventListener('pointermove', function(e){ if(down){ track.scrollLeft = sl-(e.clientX-sx); } });
   window.addEventListener('pointerup', function(){ if(down){ down=false; track.classList.remove('dragging'); } });
 
+  layoutCards();
   applyFilter('all', filter.querySelector('.sw-chip'));
   var rzT;
   window.addEventListener('resize', function(){
+    layoutCards();                               // re-tile card widths to the new track width
     refitAll();                                  // switch desktop⇄mobile preview format on breakpoint cross
     manage();
     updateRail();
-    clearTimeout(rzT); rzT=setTimeout(function(){ refitAll(); manage(); }, 220);
+    clearTimeout(rzT); rzT=setTimeout(function(){ layoutCards(); refitAll(); manage(); }, 220);
   });
   manage();
   setTimeout(function(){ manage(); refitAll(); updateRail(); }, 400);
