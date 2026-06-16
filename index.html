@@ -858,32 +858,6 @@ footer .wrap{ display:block; }
 .sw-section .sw-skel{ background:#141418; }
 .sw-section .sw-skel span{ color:rgba(255,255,255,.5); }
 
-/* ============ GOOGLE REVIEWS BELT — light glass running ticker ============ */
-.rvbelt{
-  position:relative; z-index:3;
-  background:linear-gradient(180deg,#fcf8f1,#f1ece1);
-  border-top:1px solid rgba(17,17,19,.07); border-bottom:1px solid rgba(17,17,19,.07);
-  padding:16px 0; overflow:hidden;
-  box-shadow:0 -34px 60px -46px rgba(0,0,0,.7), 0 34px 60px -46px rgba(0,0,0,.7);
-}
-.rvbelt__inner{ -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); }
-.rvbelt__track{ display:flex; gap:14px; width:max-content; will-change:transform; animation:rvscroll 46s linear infinite; }
-.rvbelt:hover .rvbelt__track{ animation-play-state:paused; }
-@keyframes rvscroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
-.rvchip{
-  flex:0 0 auto; display:inline-flex; align-items:center; gap:11px;
-  background:rgba(255,255,255,.74); backdrop-filter:saturate(170%) blur(10px); -webkit-backdrop-filter:saturate(170%) blur(10px);
-  border:1px solid rgba(17,17,19,.08); border-radius:999px; padding:10px 19px;
-  box-shadow:0 1px 2px rgba(17,17,19,.04), 0 16px 30px -24px rgba(17,17,19,.5);
-}
-.rvchip__g{ width:18px; height:18px; flex:0 0 auto; }
-.rvchip__medal{ width:18px; height:18px; flex:0 0 auto; }
-.rvchip__stars{ color:#f5a623; letter-spacing:1.5px; font-size:13px; }
-.rvchip__txt{ font-family:"Jost",sans-serif; font-weight:500; font-size:13.5px; color:var(--ink); letter-spacing:.01em; white-space:nowrap; }
-.rvchip__txt b{ font-weight:600; }
-.rvchip__sub{ color:var(--ink-faint); font-weight:400; }
-@media (prefers-reduced-motion:reduce){ .rvbelt__track{ animation:none; } }
-@media (max-width:760px){ .rvbelt__track{ animation-duration:30s; } .rvchip{ padding:9px 16px; } .rvchip__txt{ font-size:12.5px; } }
 
 /* ============ SHOWROOM reveal — heading appears only when the section is fully entered; previews then blend in ============ */
 .sw-section .shead{ opacity:0; transform:translateY(20px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
@@ -1070,19 +1044,6 @@ footer .wrap{ display:block; }
   </div>
 </header>
 
-<!-- ===================== GOOGLE REVIEWS BELT — light glass, separates hero ↔ showroom ===================== -->
-<section class="rvbelt" data-navtheme="light" aria-label="Digital Movement — 5.0 on Google from 102 reviews">
-  <div class="rvbelt__inner">
-    <div class="rvbelt__track" id="rvTrack">
-      <span class="rvchip"><svg class="rvchip__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 44 31 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg><span class="rvchip__txt"><b>Google Reviews</b></span><span class="rvchip__stars" aria-hidden="true">★★★★★</span></span>
-      <span class="rvchip"><span class="rvchip__stars" aria-hidden="true">★★★★★</span><span class="rvchip__txt"><b>5.0</b> <span class="rvchip__sub">rating on Google</span></span></span>
-      <span class="rvchip"><span class="rvchip__txt"><b>102</b> <span class="rvchip__sub">verified Google reviews</span></span></span>
-      <span class="rvchip"><svg class="rvchip__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C39.9 36.7 44 31 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg><span class="rvchip__txt"><b>5.0&nbsp;/&nbsp;5.0</b> <span class="rvchip__sub">average rating</span></span></span>
-      <span class="rvchip"><svg class="rvchip__medal" viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="5.5"/><path d="M8.4 13.2 6.8 21l5.2-2.9 5.2 2.9-1.6-7.8"/></svg><span class="rvchip__txt"><b>Best Digital Marketing Agency in Australia</b> <span class="rvchip__sub">· 2026</span></span></span>
-      <span class="rvchip"><span class="rvchip__stars" aria-hidden="true">★★★★★</span><span class="rvchip__txt"><span class="rvchip__sub">Awarded by</span> <b>Digital&nbsp;Reference</b></span></span>
-    </div>
-  </div>
-</section>
 
 <!-- ===================== SELECTED WORK — LIVE PREVIEWS (Section 1) ===================== -->
 <section id="work" class="section-pad sw-section" data-navtheme="dark">
@@ -1444,10 +1405,6 @@ footer .wrap{ display:block; }
     track.appendChild(card);
   });
   var cards = [].slice.call(track.children);
-
-  /* reviews belt: duplicate the chip set once so the marquee loops seamlessly at translateX(-50%) */
-  var rvt = document.getElementById('rvTrack');
-  if(rvt){ rvt.innerHTML += rvt.innerHTML; }
 
   /* showroom reveal: heading + controls + previews only appear once the section is fully entered */
   var swSection = document.getElementById('work'), sectionRevealed = false;
