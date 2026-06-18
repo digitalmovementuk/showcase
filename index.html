@@ -788,26 +788,14 @@ footer .wrap{ display:block; }
   .sw-section .sw-filterwrap{ position:static; margin:4px 0 0; padding:6px 0; }
   .sw-section .sw-stagehead{ margin:6px 0 5px; justify-content:center; }
   .sw-count{ text-align:center; }
-  /* horizontal swipe slider — one full iPhone + a peek of the next */
-  .sw-track{ flex-direction:row; gap:20px; overflow-x:auto; overflow-y:visible; scroll-snap-type:x mandatory; scroll-behavior:smooth; cursor:default; padding:6px 0 6px; margin:0; }
-  .sw-card{ width:auto; scroll-snap-align:center; background:transparent; border:0; border-radius:0; overflow:visible; box-shadow:none; contain-intrinsic-size:auto; content-visibility:visible; }
-  .sw-card:hover{ transform:none; box-shadow:none; }
-  .sw-section .sw-card{ box-shadow:none; }
-  /* iPhone 17 Pro Max — silver titanium device, sized so the section fits one viewport */
-  .sw-media{
-    --ip:min(calc(100svh - 300px), 600px);
-    position:relative; height:var(--ip); width:calc(var(--ip) * 0.462); min-height:0;
-    padding:10px; border-radius:52px; overflow:visible;
-    background:linear-gradient(135deg,#f4f5f7 0%,#ccced3 20%,#eef0f2 40%,#bbbfc6 58%,#e6e8eb 78%,#c6cacf 100%);
-    box-shadow:0 0 0 1px rgba(0,0,0,.22), inset 0 1px 1px rgba(255,255,255,.95), inset 0 -2px 5px rgba(0,0,0,.28), 0 30px 54px -22px rgba(0,0,0,.8);
-  }
-  .sw-media::after{ content:""; position:absolute; inset:6px; border-radius:46px; background:#0a0a0c; z-index:0; }   /* black bezel ring */
-  .sw-media::before{ content:""; position:absolute; top:20px; left:50%; transform:translateX(-50%); width:31%; height:22px; background:#000; border-radius:13px; z-index:3; }   /* Dynamic Island */
-  /* iframe must fill the iPhone screen — explicit size (width:auto on a replaced iframe falls back to 300x150) */
-  .sw-media iframe{ position:absolute; inset:auto; top:10px; left:10px; right:auto; bottom:auto; width:calc(100% - 20px); height:calc(100% - 20px); border-radius:42px; background:#000; z-index:1; }
-  .sw-skel{ inset:10px; border-radius:42px; z-index:1; }
-  .sw-hint{ display:none; }
-  .sw-foot{ justify-content:center; padding:11px 0 0; }
+  /* horizontal swipe slider — one full mobile-proportioned preview + a peek of the next */
+  .sw-track{ flex-direction:row; gap:16px; overflow-x:auto; overflow-y:visible; scroll-snap-type:x mandatory; scroll-behavior:smooth; cursor:default; padding:6px 0 10px; margin:0; }
+  .sw-card{ width:min(78vw,340px); scroll-snap-align:center; contain-intrinsic-size:auto; content-visibility:visible; }
+  /* website preview in mobile proportions — clean card, no device frame */
+  .sw-media{ position:relative; height:min(calc(100svh - 308px), 600px); width:100%; min-height:0; overflow:hidden; }
+  .sw-media iframe{ position:absolute; inset:0; top:0; left:0; width:100%; height:100%; border-radius:0; }
+  .sw-skel{ inset:0; border-radius:0; }
+  .sw-foot{ justify-content:center; padding:13px 16px 15px; }
 }
 @media (prefers-reduced-motion:reduce){
   .sw-skel::after, .sw-badge i, .sw-hint svg{ animation:none; }
