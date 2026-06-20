@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>/* always open at the very top so the cinematic intro plays from a clean hero — never a browser-restored scroll position (which also wrongly revealed the nav) */
+if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
+window.scrollTo(0,0);</script>
 <title>Showroom — Digital Movement</title>
 <meta name="description" content="A live showroom of client websites we've built — each preview is the real, working site. 5.0 on Google · Best Digital Marketing Agency in Australia 2026." />
 <link rel="icon" type="image/svg+xml" href="assets/brand/logo-color-positive.svg" />
@@ -1118,6 +1121,12 @@ footer .wrap{ display:block; }
   var hero = document.getElementById('top');
   var h1 = hero.querySelector('h1');
 
+  /* hero must load pinned to the top — kill any restored scroll on every entry point */
+  if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
+  window.scrollTo(0,0);
+  window.addEventListener('load', function(){ window.scrollTo(0,0); });
+  window.addEventListener('pageshow', function(){ window.scrollTo(0,0); });   // handles bfcache restores
+
   // ---- INTRO choreography ----
   // 0s : sign-post clip plays (slow push-in zoom onto the post)
   // 2s : sign-post clip blends OUT while the office carousel (city clip + tab) and the H1
@@ -1220,8 +1229,9 @@ footer .wrap{ display:block; }
   // nav scrolled state + progress
   function onScroll(){
     var y = window.scrollY || document.documentElement.scrollTop;
-    /* nav is hidden over the very top of the hero, then gently blends in once you scroll down */
-    var navOn = y > 96;
+    /* nav is hidden over the very top of the hero, then gently blends in once you scroll down.
+       force-hidden while the intro is locked so it can never flash in over the cinematic reveal */
+    var navOn = y > 96 && !document.body.classList.contains('intro-lock');
     nav.classList.toggle('scrolled', navOn);
     document.body.classList.toggle('scrolled', y > 24);
     nav.classList.toggle('nav--light', navOn);   /* white ice-glass bar (every section is dark) */
