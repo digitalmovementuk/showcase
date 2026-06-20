@@ -1121,11 +1121,22 @@ footer .wrap{ display:block; }
   var hero = document.getElementById('top');
   var h1 = hero.querySelector('h1');
 
-  /* hero must load pinned to the top — kill any restored scroll on every entry point */
+  /* hero must load pinned to the top — kill any restored scroll on every entry point.
+     the jump MUST be instant: with the global `scroll-behavior:smooth`, a plain
+     scrollTo(0,0) from a browser-restored position animates — i.e. the page appears
+     scrolled down and then visibly glides back up. force `auto` for the correction,
+     then restore smooth so anchor-link clicks keep their easing. */
   if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
-  window.scrollTo(0,0);
-  window.addEventListener('load', function(){ window.scrollTo(0,0); });
-  window.addEventListener('pageshow', function(){ window.scrollTo(0,0); });   // handles bfcache restores
+  function pinTop(){
+    /* behavior:'instant' overrides the global `scroll-behavior:smooth` for THIS call.
+       (toggling the inline style first does NOT take effect synchronously, so the
+       very next scrollTo would still animate — verified.) anchor clicks keep smooth. */
+    try { window.scrollTo({ top:0, left:0, behavior:'instant' }); }
+    catch(e){ window.scrollTo(0, 0); }
+  }
+  pinTop();
+  window.addEventListener('load', pinTop);
+  window.addEventListener('pageshow', pinTop);   // handles bfcache restores
 
   // ---- INTRO choreography ----
   // 0s : sign-post clip plays (slow push-in zoom onto the post)
