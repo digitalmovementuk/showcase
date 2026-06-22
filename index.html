@@ -16,18 +16,18 @@ window.scrollTo(0,0);</script>
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Showroom — Digital Movement" />
 <meta property="og:description" content="Live client websites we've built — each preview is the real, working site. 5.0 on Google · Best Digital Marketing Agency in Australia 2026." />
-<meta property="og:image" content="https://new.digitalmovement.uk/assets/og.jpg" />
-<meta property="og:image:secure_url" content="https://new.digitalmovement.uk/assets/og.jpg" />
+<meta property="og:image" content="https://success.digitalmovement.uk/assets/og.jpg" />
+<meta property="og:image:secure_url" content="https://success.digitalmovement.uk/assets/og.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Digital Movement — Showroom of live client websites" />
-<meta property="og:url" content="https://new.digitalmovement.uk/" />
-<link rel="canonical" href="https://new.digitalmovement.uk/" />
+<meta property="og:url" content="https://success.digitalmovement.uk/" />
+<link rel="canonical" href="https://success.digitalmovement.uk/" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Showroom — Digital Movement" />
 <meta name="twitter:description" content="Live client websites we've built. 5.0 on Google." />
-<meta name="twitter:image" content="https://new.digitalmovement.uk/assets/og.jpg" />
+<meta name="twitter:image" content="https://success.digitalmovement.uk/assets/og.jpg" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -47,7 +47,7 @@ window.scrollTo(0,0);</script>
   --paper:       #FFFFFF;   /* raised surface */
   --ink:         #111113;   /* near-black, neutral */
   --ink-soft:    #565659;   /* secondary text */
-  --ink-faint:   #98989C;   /* labels, meta */
+  --ink-faint:   #6B6B70;   /* labels, meta — AA-compliant (≥4.5:1) on white & bone-2 */
   --line:        rgba(17,17,19,0.12);
   --line-soft:   rgba(17,17,19,0.06);
   --gold:        #9A2FC6;   /* DM brand violet — whisper accent only */
@@ -677,6 +677,9 @@ footer .wrap{ display:block; }
   .tile-cap{ justify-content:center; flex-direction:column; align-items:center; gap:6px; text-align:center; }
   .tile-services{ text-align:center; }
   .house p, .enquire .sub{ margin-inline:auto; text-align:center; }
+  .enquire h2{ text-align:center; }
+  .contacts{ align-items:center; }
+  .contacts a, .contacts span{ justify-content:center; }
   .feature-meta{ text-align:center; margin-top:28px; }
   .feature-meta h3, .feature-meta p{ margin-inline:auto; }
   .feature-meta .visit{ margin-inline:auto; }
@@ -781,7 +784,7 @@ footer .wrap{ display:block; }
 .sw-empty{ display:none; padding:48px 0 16px; text-align:center; color:var(--ink-faint); }
 
 @media(max-width:760px){
-  html{ scroll-snap-type:y proximity; }
+  html{ /* page scroll-snap removed for the multi-section layout */ }
   .sw-stagehead .sw-nav, .sw-rail{ display:none; }
   /* whole showroom fits ONE mobile viewport (same as desktop) */
   .sw-section{ scroll-snap-align:start; scroll-snap-stop:always; height:100svh; padding-block:0; overflow:hidden; }
@@ -879,7 +882,7 @@ footer .wrap{ display:block; }
 .sw-section.revealed .sw-filterwrap, .sw-section.revealed .sw-stagehead, .sw-section.revealed .sw-track{ opacity:1; }
 /* strong scroll lock + the whole showroom fits ONE desktop viewport (iframes sized to fit) */
 @media (min-width:761px){
-  html{ scroll-snap-type:y proximity; }   /* catches a casual scroll into the showroom without trapping the page */
+  html{ /* page scroll-snap removed for the multi-section layout */ }   /* catches a casual scroll into the showroom without trapping the page */
   .sw-section{
     scroll-snap-align:start; scroll-snap-stop:always;
     height:100svh; min-height:600px; padding-block:0; overflow:hidden;
@@ -920,6 +923,477 @@ footer .wrap{ display:block; }
 .hero-quote p{ font-family:"Jost",sans-serif; font-weight:300; font-style:italic; font-size:clamp(14px,1.4vw,17.5px); line-height:1.5; color:#fff; text-shadow:0 1px 18px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.3); margin:0; }
 .hero-quote cite{ display:block; margin-top:9px; font-family:"Jost",sans-serif; font-style:normal; font-weight:500; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.74); text-shadow:0 1px 10px rgba(0,0,0,.5); }
 @media(max-width:760px){ .hero-quote{ max-width:90%; } .hero-quote p{ font-size:14px; } }
+
+/* ==================================================================
+   SHOWROOM SECTIONS (integrated) — pill nav · case studies · video testimonials · reviews
+   ================================================================== */
+
+/* ===== integration: anchor offsets so pill/anchor jumps clear the sticky bar ===== */
+#whatwedo, #success, #work, #case-studies, #testimonials, #reviews, #contact{ scroll-margin-top:72px; }
+
+/* ===== PILL NAV (prefix: pnav-) — centered stadium-pill in-page tabs for .nav ===== */
+
+/* Override the existing centered wordmark so logo goes LEFT, pills CENTER, controls RIGHT */
+.nav .wordmark{
+  position:static;
+  transform:none;
+  left:auto;
+  top:auto;
+  margin-right:auto;
+}
+
+/* The pill cluster — absolutely centered in the nav bar */
+.pnav{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .5s var(--ease);
+  max-width:calc(100% - 300px); /* leave room for logo + controls */
+}
+.nav.scrolled .pnav{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.pnav-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  border-radius:999px;
+  padding:7px 16px;
+  border:1px solid transparent;
+  font-family:"Jost",sans-serif;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.02em;
+  line-height:1;
+  text-decoration:none;
+  cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  transition:color .3s var(--ease), background-color .3s var(--ease),
+             border-color .3s var(--ease), transform .3s var(--ease);
+}
+.pnav-pill:hover{ transform:translateY(-1px); }
+.pnav-pill:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:2px;
+}
+
+/* ---- DARK bar (over hero / #work) : light-on-dark ---- */
+.nav.nav--dark .pnav-pill{
+  color:rgba(255,255,255,.78);
+  border-color:rgba(255,255,255,.22);
+  background:rgba(255,255,255,.06);
+}
+.nav.nav--dark .pnav-pill:hover{
+  color:#fff;
+  border-color:rgba(255,255,255,.45);
+}
+.nav.nav--dark .pnav-pill.is-active{
+  background:#fff;
+  color:#111;
+  border-color:#fff;
+}
+
+/* ---- LIGHT bar (over #case-studies / #testimonials / #reviews) : dark-on-light ---- */
+.nav.nav--light .pnav-pill{
+  color:var(--ink-soft);
+  border-color:var(--line);
+  background:rgba(255,255,255,.55);
+}
+.nav.nav--light .pnav-pill:hover{
+  color:var(--ink);
+  border-color:rgba(17,17,19,.28);
+}
+.nav.nav--light .pnav-pill.is-active{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
+}
+
+/* ---- TABLET/MOBILE (<=900px): pills move to their own full-width, centered, scrollable
+       SECOND ROW so they never overlap the logo or controls (Cunos-style stays on desktop) ---- */
+@media (max-width:1120px){
+  .nav{ flex-wrap:wrap; row-gap:8px; }
+  .pnav{
+    position:static; transform:none; left:auto; top:auto;
+    order:3; flex:0 0 100%; width:100%; max-width:100%;
+    margin:2px 0 0;
+    gap:7px;
+    justify-content:safe center;     /* centred when they fit, scrolls when they don't */
+    overflow-x:auto; overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
+    padding:2px 2px 3px;
+    /* pills stay visible whenever the bar is in its scrolled (visible) state */
+    mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);
+  }
+  .pnav::-webkit-scrollbar{ display:none; height:0; }
+  .pnav-pill{ flex:0 0 auto; font-size:12px; padding:6px 13px; }
+}
+@media (max-width:420px){
+  .pnav-pill{ font-size:11.5px; padding:6px 12px; }
+}
+/* ===== CSG — SEO Growth Case Studies (light) ===== */
+.csg-list{ display:flex; flex-direction:column; gap:18px; margin-top:clamp(40px,6vh,72px); }
+
+.csg-card{
+  position:relative; display:grid;
+  grid-template-columns:auto 1fr auto auto;
+  align-items:center; gap:clamp(20px,3vw,40px);
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:22px; padding:clamp(22px,3vw,32px) clamp(24px,3.4vw,40px);
+  cursor:pointer; text-align:left;
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+  box-shadow:0 1px 0 rgba(17,17,19,0.02);
+}
+.csg-card:hover{ transform:translateY(-3px); border-color:var(--line); box-shadow:0 24px 50px -28px rgba(17,17,19,0.30); }
+.csg-card:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+.csg-id{ display:flex; flex-direction:column; align-items:center; gap:8px; min-width:64px; }
+.csg-av{
+  width:52px; height:52px; border-radius:999px; background:var(--bone-2);
+  border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  font-family:"Jost",sans-serif; font-weight:500; font-size:16px; letter-spacing:.04em; color:var(--ink);
+}
+.csg-role{ font-family:"Jost",sans-serif; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); white-space:nowrap; }
+
+.csg-main{ min-width:0; }
+.csg-name{ font-family:"Jost",sans-serif; font-weight:400; font-size:clamp(20px,2.2vw,26px); color:var(--ink); margin:0 0 7px; line-height:1.1; }
+.csg-teaser{ font-family:"Inter",sans-serif; font-size:14.5px; line-height:1.5; color:var(--ink-soft); margin:0 0 12px; max-width:46ch; }
+.csg-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.csg-tag{
+  font-family:"Jost",sans-serif; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-soft); background:var(--bone-2); border:1px solid var(--line-soft);
+  border-radius:999px; padding:6px 12px; white-space:nowrap;
+}
+
+.csg-metricpair{ display:flex; gap:clamp(20px,2.6vw,36px); }
+.csg-metric{ display:flex; flex-direction:column; align-items:flex-start; }
+.csg-fig{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(26px,3vw,38px); color:var(--ink); line-height:1; }
+.csg-cap{ font-family:"Jost",sans-serif; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin-top:7px; }
+
+.csg-explore{
+  display:inline-flex; align-items:center; gap:9px; white-space:nowrap;
+  font-family:"Jost",sans-serif; font-weight:500; font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink); background:transparent; border:1px solid var(--line);
+  border-radius:999px; padding:13px 22px; min-height:44px; cursor:pointer;
+  transition:background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
+}
+.csg-explore svg{ transition:transform .4s var(--ease); }
+.csg-card:hover .csg-explore{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.csg-card:hover .csg-explore svg{ transform:translateX(4px); }
+
+/* ===== Modal ===== */
+.csg-modal{
+  position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center;
+  padding:clamp(16px,4vw,48px);
+  opacity:0; visibility:hidden; transition:opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.csg-modal.is-open{ opacity:1; visibility:visible; }
+.csg-backdrop{ position:absolute; inset:0; background:rgba(17,17,19,0.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+.csg-dialog{
+  position:relative; width:min(680px,100%); max-height:90vh; overflow-y:auto;
+  background:var(--paper); border:1px solid var(--line); border-radius:24px;
+  padding:clamp(28px,4vw,52px); text-align:left;
+  transform:scale(.94) translateY(10px); transition:transform .45s var(--ease);
+  box-shadow:0 40px 90px -30px rgba(17,17,19,0.5);
+}
+.csg-modal.is-open .csg-dialog{ transform:scale(1) translateY(0); }
+
+.csg-close{
+  position:absolute; top:18px; right:18px; width:44px; height:44px; border-radius:999px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  background:var(--bone-2); border:1px solid var(--line); color:var(--ink);
+  transition:background .3s var(--ease), color .3s var(--ease);
+}
+.csg-close:hover{ background:var(--ink); color:#fff; }
+.csg-close:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+.csg-modal-head{ display:flex; align-items:center; gap:18px; margin-bottom:26px; }
+.csg-modal-av{
+  width:96px; height:96px; flex:0 0 96px; border-radius:999px; background:var(--bone-2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Jost",sans-serif; font-weight:500; font-size:30px; color:var(--ink);
+  border:3px solid transparent;
+  background-image:linear-gradient(var(--bone-2),var(--bone-2)),linear-gradient(90deg,#F05F22,#EC178D,#9A2FC6);
+  background-origin:border-box; background-clip:content-box,border-box;
+}
+.csg-modal-md{ font-family:"Jost",sans-serif; font-weight:500; font-size:19px; color:var(--ink); margin:0 0 4px; }
+.csg-modal-mdrole{ font-family:"Inter",sans-serif; font-size:13px; color:var(--ink-soft); margin:0; }
+
+.csg-modal-biz{ margin-bottom:22px; }
+.csg-modal-bizname{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(26px,3.4vw,36px); color:var(--ink); margin:0 0 12px; line-height:1.08; }
+.csg-modal-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+
+.csg-metrics{
+  display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0;
+  border-block:1px solid var(--line); padding-block:26px;
+}
+.csg-metrics .csg-metric{ align-items:flex-start; }
+.csg-metrics .csg-fig{ font-size:clamp(40px,6vw,58px); }
+.csg-metrics .csg-cap{ margin-top:9px; }
+
+.csg-modal-desc{ font-family:"Inter",sans-serif; font-size:15px; line-height:1.65; color:var(--ink-soft); margin:0; }
+
+/* ===== Mobile ===== */
+@media (max-width:860px){
+  .csg-card{ grid-template-columns:1fr; text-align:center; gap:18px; padding:30px 24px; }
+  .csg-id{ align-items:center; }
+  .csg-teaser{ margin-inline:auto; }
+  .csg-tags{ justify-content:center; }
+  .csg-metricpair{ justify-content:center; }
+  .csg-metric{ align-items:center; }
+  .csg-explore{ justify-self:center; }
+  .csg-modal-head{ flex-direction:column; text-align:center; }
+  .csg-metrics{ grid-template-columns:1fr; text-align:center; }
+  .csg-metrics .csg-metric{ align-items:center; }
+  .csg-modal-tags{ justify-content:center; }
+  .csg-modal-desc{ text-align:left; }
+}
+/* ===== VIDEO TESTIMONIALS (vt-) — light theme ===== */
+.vt-section{background:var(--bone-2);}
+.vt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.vt-head .shead{margin-bottom:0;}
+.vt-nav{display:flex;gap:12px;flex-shrink:0;padding-bottom:6px;}
+.vt-arrow{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .35s var(--ease);-webkit-appearance:none;appearance:none;}
+.vt-arrow svg{width:18px;height:18px;display:block;}
+.vt-arrow:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.vt-arrow:active{transform:scale(.94);}
+.vt-arrow:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+.vt-arrow[disabled]{opacity:.32;cursor:default;}
+.vt-arrow[disabled]:hover{background:var(--paper);color:var(--ink);border-color:var(--line);}
+
+.vt-scroller{margin-top:clamp(40px,6vh,72px);position:relative;}
+.vt-track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 2px 18px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;}
+.vt-track::-webkit-scrollbar{display:none;width:0;height:0;}
+
+.vt-card{flex:0 0 auto;width:min(85vw,360px);scroll-snap-align:start;background:var(--paper);border:1px solid var(--line-soft);border-radius:18px;overflow:hidden;box-shadow:0 1px 2px rgba(17,17,19,.04),0 18px 44px -28px rgba(17,17,19,.28);display:flex;flex-direction:column;transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
+.vt-card:hover{transform:translateY(-4px);box-shadow:0 1px 2px rgba(17,17,19,.05),0 30px 60px -30px rgba(17,17,19,.34);}
+
+.vt-video{position:relative;aspect-ratio:4/5;background:#0d0d0f;overflow:hidden;}
+.vt-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.vt-video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.34));pointer-events:none;}
+
+.vt-sound{position:absolute;right:12px;bottom:12px;z-index:2;display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);font-family:"Jost",sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .3s var(--ease),transform .3s var(--ease);}
+.vt-sound svg{width:15px;height:15px;display:block;}
+.vt-sound:hover{background:#fff;}
+.vt-sound:active{transform:scale(.95);}
+.vt-sound:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.vt-sound .vt-ic-off{display:inline-flex;}
+.vt-sound .vt-ic-on{display:none;}
+.vt-sound .vt-sound-txt::after{content:"Unmute";}
+.vt-sound.is-on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.vt-sound.is-on .vt-ic-off{display:none;}
+.vt-sound.is-on .vt-ic-on{display:inline-flex;}
+.vt-sound.is-on .vt-sound-txt::after{content:"Mute";}
+
+.vt-body{padding:24px 22px 26px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+.vt-name{font-family:"Jost",sans-serif;font-weight:600;font-size:16px;color:var(--ink);letter-spacing:.01em;}
+.vt-role{font-family:"Inter",sans-serif;font-size:12.5px;color:var(--ink-soft);letter-spacing:.01em;line-height:1.4;}
+.vt-desc{font-family:"Inter",sans-serif;font-size:13.5px;line-height:1.55;color:var(--ink-soft);margin:10px 0 18px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:30ch;}
+.vt-visit{margin-top:auto;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-family:"Jost",sans-serif;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:background .35s var(--ease),color .35s var(--ease);}
+.vt-visit svg{width:14px;height:14px;display:block;transition:transform .35s var(--ease);}
+.vt-visit:hover{background:transparent;color:var(--ink);}
+.vt-visit:hover svg{transform:translate(2px,-2px);}
+.vt-visit:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+@media (max-width:760px){
+  .vt-head{justify-content:center;text-align:center;flex-direction:column;align-items:center;}
+  .vt-head .shead{align-items:center;}
+  .vt-nav{justify-content:center;}
+  .vt-card{width:min(85vw,340px);}
+}
+@media (prefers-reduced-motion:reduce){
+  .vt-track{scroll-behavior:auto;}
+  .vt-card,.vt-arrow,.vt-visit svg,.vt-sound,.vt-visit{transition:none;}
+}
+/* ===== GOOGLE REVIEWS WALL — prefix grev- (LIGHT THEME) ===== */
+.grev-section{ background:var(--bone); }
+
+/* Aggregate badge */
+.grev-agg{
+  max-width:640px;
+  margin:0 auto clamp(40px,6vh,72px);
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:clamp(26px,4vw,40px) clamp(22px,4vw,44px);
+  text-align:center;
+  box-shadow:0 1px 2px rgba(17,17,19,.04), 0 18px 40px -28px rgba(17,17,19,.22);
+}
+.grev-agg-top{
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; flex-wrap:wrap;
+}
+.grev-glogo{ width:30px; height:30px; flex:none; display:block; }
+.grev-figure{
+  font-family:"Jost",sans-serif; font-weight:300;
+  font-size:clamp(40px,6vw,58px); line-height:1;
+  color:var(--ink); letter-spacing:.01em;
+}
+.grev-agg-stars{ display:inline-flex; gap:3px; }
+.grev-agg-stars svg{ width:24px; height:24px; display:block; }
+.grev-agg-meta{
+  margin-top:16px;
+  font-family:"Inter",sans-serif; font-size:14px; line-height:1.5;
+  color:var(--ink-soft);
+}
+.grev-agg-link{
+  display:inline-block; margin-top:6px;
+  font-family:"Jost",sans-serif; font-weight:500;
+  font-size:12.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink); text-decoration:none;
+  border-bottom:1px solid var(--line);
+  padding-bottom:2px; transition:border-color .35s var(--ease), color .35s var(--ease);
+}
+.grev-agg-link:hover{ color:var(--gold); border-color:var(--gold); }
+
+/* Star icon shared sizing */
+.grev-stars{ display:inline-flex; gap:3px; }
+.grev-stars svg{ width:16px; height:16px; display:block; }
+
+/* Wall grid */
+.grev-wall{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  align-items:stretch;
+}
+@media (max-width:1100px){ .grev-wall{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:680px){ .grev-wall{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:460px){ .grev-wall{ grid-template-columns:1fr; } }
+
+/* Review card */
+.grev-card{
+  display:flex; flex-direction:column;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px 18px 16px;
+  box-shadow:0 1px 2px rgba(17,17,19,.03), 0 12px 28px -24px rgba(17,17,19,.18);
+  transition:transform .45s var(--ease), box-shadow .45s var(--ease), border-color .45s var(--ease);
+}
+.grev-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 1px 2px rgba(17,17,19,.04), 0 22px 44px -26px rgba(17,17,19,.28);
+  border-color:rgba(17,17,19,.18);
+}
+.grev-card .grev-stars{ margin-bottom:11px; }
+
+.grev-quote{
+  font-family:"Inter",sans-serif;
+  font-size:14px; line-height:1.6;
+  color:var(--ink-soft);
+  margin:0 0 16px;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  overflow-wrap:break-word;
+  word-break:break-word;
+}
+
+.grev-who{
+  display:flex; align-items:center; gap:11px;
+  margin-top:auto;
+}
+.grev-av{
+  width:30px; height:30px; flex:none;
+  border-radius:50%;
+  background:var(--ink); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Jost",sans-serif; font-weight:500; font-size:13px;
+  line-height:1; text-transform:uppercase;
+}
+.grev-who-text{ min-width:0; }
+.grev-name{
+  font-family:"Jost",sans-serif; font-weight:600;
+  font-size:13px; line-height:1.3; color:var(--ink);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.grev-date{
+  font-family:"Roboto",sans-serif;
+  font-size:11px; line-height:1.3; color:var(--ink-faint);
+}
+
+/* CTA */
+.grev-cta-row{ text-align:center; margin-top:clamp(36px,5vh,56px); }
+.grev-cta{
+  display:inline-flex; align-items:center; gap:9px;
+  min-height:48px; padding:0 30px;
+  border-radius:999px;
+  border:1px solid var(--ink);
+  background:var(--ink); color:#fff;
+  font-family:"Jost",sans-serif; font-weight:500;
+  font-size:13px; letter-spacing:.1em; text-transform:uppercase;
+  text-decoration:none;
+  transition:background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
+}
+.grev-cta:hover{ background:transparent; color:var(--ink); border-color:var(--ink); }
+.grev-cta svg{ width:15px; height:15px; flex:none; }
+
+/* Mobile centring (house rule) */
+@media (max-width:680px){
+  .grev-card{ text-align:center; align-items:center; }
+  .grev-card .grev-stars{ justify-content:center; }
+  .grev-who{ justify-content:center; }
+  .grev-name{ white-space:normal; }
+}
+
+/* ===== SUCCESS STORIES (ss-) — client website showcase, light ===== */
+.ss-section{ background:var(--bone-2); }
+.ss-grid{ margin-top:clamp(40px,6vh,72px); display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(16px,2vw,26px); }
+@media(max-width:1024px){ .ss-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .ss-grid{ grid-template-columns:1fr; } }
+.ss-card{ display:block; border-radius:18px; overflow:hidden; background:var(--paper); border:1px solid var(--line);
+  box-shadow:0 1px 2px rgba(17,17,19,.04), 0 18px 44px -30px rgba(17,17,19,.30);
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease); }
+.ss-card:hover{ transform:translateY(-5px); box-shadow:0 1px 2px rgba(17,17,19,.05), 0 34px 70px -34px rgba(17,17,19,.42); border-color:rgba(17,17,19,.16); }
+.ss-card:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+.ss-shot{ position:relative; aspect-ratio:552/424; overflow:hidden; background:var(--bone-2); }
+.ss-shot img{ width:100%; height:100%; object-fit:cover; object-position:top center; transition:transform 1.4s var(--ease); }
+.ss-card:hover .ss-shot img{ transform:scale(1.05); }
+.ss-overlay{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg, rgba(17,17,19,0) 38%, rgba(17,17,19,.55) 100%); opacity:0; transition:opacity .4s var(--ease); }
+.ss-card:hover .ss-overlay{ opacity:1; }
+.ss-open{ display:inline-flex; align-items:center; gap:8px; font-family:"Jost",sans-serif; font-weight:500; font-size:12px;
+  letter-spacing:.14em; text-transform:uppercase; color:#111; background:#fff; border-radius:999px; padding:12px 22px;
+  transform:translateY(8px); transition:transform .4s var(--ease); }
+.ss-card:hover .ss-open{ transform:none; }
+.ss-open svg{ width:13px; height:13px; }
+.ss-foot{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px 18px 16px; border-top:1px solid var(--line); }
+.ss-m{ min-width:0; }
+.ss-name{ font-family:"Jost",sans-serif; font-weight:500; font-size:15px; color:var(--ink); line-height:1.2; }
+.ss-dom{ font-family:"Roboto",sans-serif; font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.ss-go{ flex:0 0 auto; color:var(--ink-faint); transition:color .35s var(--ease), transform .35s var(--ease); }
+.ss-go svg{ width:16px; height:16px; }
+.ss-card:hover .ss-go{ color:var(--gold); transform:translate(2px,-2px); }
+@media(max-width:560px){ .ss-foot{ justify-content:center; flex-direction:column; gap:3px; text-align:center; } .ss-go{ display:none; } }
+
+/* contact section is light — ensure ink heading on light bg */
+#contact.enquire .shead{ margin-bottom:0; }
+
+/* ===== WHAT WE DO (ww-) — micro agency profile under the hero, light ===== */
+.ww-section{ background:var(--bone); border-bottom:1px solid var(--line-soft); }
+.ww-inner{ padding-block:clamp(56px,9vh,104px); text-align:center; display:flex; flex-direction:column; align-items:center; }
+.ww-inner .label{ display:flex; align-items:center; justify-content:center; margin-bottom:22px; }
+.ww-lead{ font-family:"Jost",sans-serif; font-weight:300; font-size:clamp(27px,4vw,48px); line-height:1.12; letter-spacing:-0.01em; color:var(--ink); max-width:18ch; }
+.ww-lead em{ font-style:italic; font-weight:300; }
+.ww-sub{ margin-top:18px; font-size:clamp(15px,1.4vw,18px); line-height:1.6; color:var(--ink-soft); max-width:52ch; }
+.ww-services{ list-style:none; display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:30px 0 0; padding:0; }
+.ww-services li{ font-family:"Jost",sans-serif; font-weight:500; font-size:13px; letter-spacing:.02em; color:var(--ink);
+  background:var(--bone-2); border:1px solid var(--line); border-radius:999px; padding:10px 19px; }
+.ww-meta{ margin-top:28px; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-size:11px; color:var(--ink-faint); }
+@media(max-width:600px){ .ww-services{ gap:8px; } .ww-services li{ font-size:12px; padding:8px 15px; } .ww-meta{ letter-spacing:.12em; } }
 </style>
 </head>
 <body class="intro-lock">
@@ -937,6 +1411,14 @@ footer .wrap{ display:block; }
 <!-- ===================== NAV ===================== -->
 <nav class="nav" id="nav">
   <a href="#top" class="wordmark" aria-label="Digital Movement"><img src="assets/brand/logo-color-negative.svg" alt="Digital Movement" class="brandlogo brandlogo--neg" /><img src="assets/brand/logo-color-positive.svg" alt="Digital Movement" class="brandlogo brandlogo--pos" /></a>
+  <nav class="pnav" role="tablist" aria-label="In-page sections" data-pnav>
+    <a class="pnav-pill" role="tab" href="#success" data-pnav-target="#success">Success Stories</a>
+    <a class="pnav-pill" role="tab" href="#work" data-pnav-target="#work">Web Design Showroom</a>
+    <a class="pnav-pill" role="tab" href="#testimonials" data-pnav-target="#testimonials">Testimonials</a>
+    <a class="pnav-pill" role="tab" href="#case-studies" data-pnav-target="#case-studies">Case Studies</a>
+    <a class="pnav-pill" role="tab" href="#reviews" data-pnav-target="#reviews">Reviews</a>
+    <a class="pnav-pill" role="tab" href="#contact" data-pnav-target="#contact">Contact</a>
+  </nav>
   <div class="nav-controls">
     <a href="https://au.linkedin.com/company/digitalmovement" target="_blank" rel="noopener" class="nav-social" aria-label="Digital Movement on LinkedIn">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .78 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .78 23.2 0 22.22 0z"/></svg>
@@ -946,7 +1428,12 @@ footer .wrap{ display:block; }
 </nav>
 
 <div class="drawer" id="drawer">
-  <a href="#work">Selected work</a>
+  <a href="#success">Success Stories</a>
+  <a href="#work">Web Design Showroom</a>
+  <a href="#testimonials">Testimonials</a>
+  <a href="#case-studies">Case Studies</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#contact">Contact</a>
   <a href="https://wa.me/442038157992" target="_blank" rel="noopener">WhatsApp us</a>
   <a href="mailto:office@digitalmovement.uk">Email us</a>
   <span class="label">London · Auckland · Berlin · Melbourne</span>
@@ -1057,12 +1544,160 @@ footer .wrap{ display:block; }
   </div>
 </header>
 
+<!-- ============ WHAT WE DO (micro intro) ============ -->
+<section id="whatwedo" class="ww-section" data-navtheme="light">
+  <div class="wrap ww-inner">
+    <p class="label"><span class="rule-gold"></span> What we do</p>
+    <p class="ww-lead reveal">We help businesses <em>grow and scale</em>.</p>
+    <p class="ww-sub reveal">We do this via SEO, AI Search (GEO), Paid Ads, and CRM automations.</p>
+    <ul class="ww-services reveal">
+      <li>SEO</li>
+      <li>AI Search (GEO)</li>
+      <li>Paid Ads</li>
+      <li>CRM Automations</li>
+    </ul>
+    <p class="ww-meta reveal">Est. 2018 &middot; Global footprint &middot; London &middot; Auckland &middot; Berlin &middot; Melbourne</p>
+  </div>
+</section>
 
-<!-- ===================== SELECTED WORK — LIVE PREVIEWS (Section 1) ===================== -->
+<!-- ============ SUCCESS STORIES (Section 1) ============ -->
+<section id="success" class="section-pad ss-section" data-navtheme="light">
+  <div class="wrap">
+    <div class="shead reveal">
+      <p class="label"><span class="rule-gold"></span> 01 — Success Stories</p>
+      <h2 class="disp">Success Stories</h2>
+      <p class="sub">Real client websites we built and grew — open any one to see it live.</p>
+    </div>
+    <div class="ss-grid">
+      <a class="ss-card reveal" href="https://apexaesthetics.com.au/" target="_blank" rel="noopener" aria-label="Open the Apex Aesthetics website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/apexaesthetics.png" alt="Apex Aesthetics — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">Apex Aesthetics</div><div class="ss-dom">apexaesthetics.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://ateiaphotography.com.au/" target="_blank" rel="noopener" aria-label="Open the Ateia Photography website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/ateiaphotography.png" alt="Ateia Photography — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">Ateia Photography</div><div class="ss-dom">ateiaphotography.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://www.irsgroup.com.au/" target="_blank" rel="noopener" aria-label="Open the IRS Group website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/irsgroup.png" alt="IRS Group — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">IRS Group</div><div class="ss-dom">irsgroup.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://www.mwhomes.com.au/" target="_blank" rel="noopener" aria-label="Open the MW Homes website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/mwhomes.png" alt="MW Homes — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">MW Homes</div><div class="ss-dom">mwhomes.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://homebuildersiq.com.au/" target="_blank" rel="noopener" aria-label="Open the Home Builders IQ website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/homebuildersiq.png" alt="Home Builders IQ — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">Home Builders IQ</div><div class="ss-dom">homebuildersiq.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://www.cmdplumbing.com.au/" target="_blank" rel="noopener" aria-label="Open the CMD Plumbing website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/cmdplumbing.png" alt="CMD Plumbing — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">CMD Plumbing</div><div class="ss-dom">cmdplumbing.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://www.pblawyersaustralia.com.au/" target="_blank" rel="noopener" aria-label="Open the PB Lawyers Australia website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/pblawyers.png" alt="PB Lawyers Australia — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">PB Lawyers Australia</div><div class="ss-dom">pblawyersaustralia.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://australianrangehoods.com.au/" target="_blank" rel="noopener" aria-label="Open the Australian Rangehoods website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/australianrangehoods.png" alt="Australian Rangehoods — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">Australian Rangehoods</div><div class="ss-dom">australianrangehoods.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://mcfe.com.au/" target="_blank" rel="noopener" aria-label="Open the MCFE website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/mcfe.png" alt="MCFE — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">MCFE</div><div class="ss-dom">mcfe.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://www.auskitchenco.com.au/" target="_blank" rel="noopener" aria-label="Open the Aus Kitchen Co website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/auskitchenco.png" alt="Aus Kitchen Co — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">Aus Kitchen Co</div><div class="ss-dom">auskitchenco.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://scdoors.com.au/" target="_blank" rel="noopener" aria-label="Open the SC Doors website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/scdoors.png" alt="SC Doors — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">SC Doors</div><div class="ss-dom">scdoors.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+      <a class="ss-card reveal" href="https://nqcustombuild.com.au/" target="_blank" rel="noopener" aria-label="Open the NQ Custom Build website in a new tab">
+        <div class="ss-shot">
+          <img src="assets/success/nqcustombuild.png" alt="NQ Custom Build — website built and grown by Digital Movement" loading="lazy" width="552" height="424" />
+          <div class="ss-overlay"><span class="ss-open">Open website <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div>
+        </div>
+        <div class="ss-foot">
+          <div class="ss-m"><div class="ss-name">NQ Custom Build</div><div class="ss-dom">nqcustombuild.com.au</div></div>
+          <span class="ss-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEB DESIGN SHOWROOM (Section 2) ============ -->
 <section id="work" class="section-pad sw-section" data-navtheme="dark">
   <div class="wrap">
     <div class="shead reveal">
-      <p class="label"><span class="rule-gold"></span> 01 — Selected work</p>
+      <p class="label"><span class="rule-gold"></span> 02 — Web Design Showroom</p>
       <h2 class="disp">Showroom</h2>
     </div>
 
@@ -1084,6 +1719,518 @@ footer .wrap{ display:block; }
   </div>
 </section>
 
+<!-- ============ TESTIMONIALS (Section 3) ============ -->
+<section id="testimonials" class="section-pad vt-section" data-navtheme="light">
+  <div class="wrap">
+    <div class="vt-head">
+      <div class="shead reveal">
+        <p class="label"><span class="rule-gold"></span> 03 — Testimonials</p>
+        <h2 class="disp">Testimonials</h2>
+        <p class="sub">Founders and directors on the work, the numbers, and what changed.</p>
+      </div>
+      <div class="vt-nav reveal" aria-hidden="false">
+        <button type="button" class="vt-arrow" data-vt-dir="prev" aria-label="Previous testimonial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="vt-arrow" data-vt-dir="next" aria-label="Next testimonial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="vt-scroller reveal">
+      <div class="vt-track" role="list" data-vt-track>
+
+        <!-- 1 -->
+        <article class="vt-card" role="listitem">
+          <div class="vt-video">
+            <video data-vt-video src="assets/testimonials/azura.mp4" muted loop playsinline preload="metadata"></video>
+            <button type="button" class="vt-sound" data-vt-sound aria-pressed="false" aria-label="Unmute video">
+              <span class="vt-ic-off" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+              <span class="vt-ic-on" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8 8 0 0 1 0 12"/></svg></span>
+              <span class="vt-sound-txt"></span>
+            </button>
+          </div>
+          <div class="vt-body">
+            <p class="vt-name">Ayham Muhrez</p>
+            <p class="vt-role">CEO &amp; Founder, Azura Living Bali</p>
+            <p class="vt-desc">From zero to page one for &lsquo;villa rental bali&rsquo; in 90 days &mdash; direct bookings instead of platform commission.</p>
+            <a class="vt-visit" href="#">Visit Website
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="vt-card" role="listitem">
+          <div class="vt-video">
+            <video data-vt-video src="assets/testimonials/address.mp4" muted loop playsinline preload="metadata"></video>
+            <button type="button" class="vt-sound" data-vt-sound aria-pressed="false" aria-label="Unmute video">
+              <span class="vt-ic-off" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+              <span class="vt-ic-on" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8 8 0 0 1 0 12"/></svg></span>
+              <span class="vt-sound-txt"></span>
+            </button>
+          </div>
+          <div class="vt-body">
+            <p class="vt-name">Faisal Chauhan</p>
+            <p class="vt-role">Director, ADDRESSBALI&reg;</p>
+            <p class="vt-desc">Premium villa brand. Full website redesign plus a performance-marketing sprint, 8&times; the enquiry pipeline.</p>
+            <a class="vt-visit" href="#">Visit Website
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="vt-card" role="listitem">
+          <div class="vt-video">
+            <video data-vt-video src="assets/testimonials/cunos.mp4" muted loop playsinline preload="metadata"></video>
+            <button type="button" class="vt-sound" data-vt-sound aria-pressed="false" aria-label="Unmute video">
+              <span class="vt-ic-off" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+              <span class="vt-ic-on" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8 8 0 0 1 0 12"/></svg></span>
+              <span class="vt-sound-txt"></span>
+            </button>
+          </div>
+          <div class="vt-body">
+            <p class="vt-name">Enting Man</p>
+            <p class="vt-role">Founder &amp; Director, Cunos</p>
+            <p class="vt-desc">B2B consultancy. Sharp positioning, SEO-first architecture, qualified inbound leads from day 30.</p>
+            <a class="vt-visit" href="https://cunos.co.uk" target="_blank" rel="noopener">Visit Website
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="vt-card" role="listitem">
+          <div class="vt-video">
+            <video data-vt-video src="assets/testimonials/pentadoc.mp4" muted loop playsinline preload="metadata"></video>
+            <button type="button" class="vt-sound" data-vt-sound aria-pressed="false" aria-label="Unmute video">
+              <span class="vt-ic-off" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+              <span class="vt-ic-on" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8 8 0 0 1 0 12"/></svg></span>
+              <span class="vt-sound-txt"></span>
+            </button>
+          </div>
+          <div class="vt-body">
+            <p class="vt-name">Dana</p>
+            <p class="vt-role">Marketing Director, Pentadoc</p>
+            <p class="vt-desc">Document-intelligence platform. Editorial homepage, clean conversion architecture, demo requests doubled.</p>
+            <a class="vt-visit" href="https://pentadoc.com" target="_blank" rel="noopener">Visit Website
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- 5 -->
+        <article class="vt-card" role="listitem">
+          <div class="vt-video">
+            <video data-vt-video src="assets/testimonials/cx.mp4" muted loop playsinline preload="metadata"></video>
+            <button type="button" class="vt-sound" data-vt-sound aria-pressed="false" aria-label="Unmute video">
+              <span class="vt-ic-off" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+              <span class="vt-ic-on" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8 8 0 0 1 0 12"/></svg></span>
+              <span class="vt-sound-txt"></span>
+            </button>
+          </div>
+          <div class="vt-body">
+            <p class="vt-name">Johannes</p>
+            <p class="vt-role">Founder &amp; CEO, CX</p>
+            <p class="vt-desc">Customer-excellence platform. Sunset hero plus service cards. SEO architecture carries the B2B pipeline.</p>
+            <a class="vt-visit" href="#">Visit Website
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CASE STUDIES (Section 4) ============ -->
+<section id="case-studies" class="section-pad csg-section" data-navtheme="light">
+  <div class="wrap">
+    <div class="shead reveal">
+      <p class="label"><span class="rule-gold"></span> 04 — Case Studies</p>
+      <h2 class="disp">Case Studies</h2>
+      <p class="sub">Five businesses, five industries — and the search-led growth that followed.</p>
+    </div>
+
+    <div class="csg-list">
+      <!-- Card 1 — Real Estate -->
+      <button type="button" class="csg-card reveal"
+        data-name="Coastal Estates"
+        data-md="Eliza Hartwell"
+        data-mdinit="EH"
+        data-mdrole="Managing Director, Coastal Estates"
+        data-industries="Real Estate"
+        data-clients="+38"
+        data-revenue="+212%"
+        data-desc="A premium coastal real estate brand was invisible for the searches buyers actually used — high-intent suburb and lifestyle queries owned by national portals. We rebuilt the site around location-led landing pages, listing schema and a genuine local-authority footprint. Within two quarters the brand ranked on page one for its priority suburbs and turned organic traffic into qualified buyer enquiries rather than browsers. The pipeline shifted from referral-dependent to predictable and search-driven.">
+        <span class="csg-id">
+          <span class="csg-av">EH</span>
+          <span class="csg-role">Managing Director</span>
+        </span>
+        <span class="csg-main">
+          <span class="csg-name">Coastal Estates</span>
+          <span class="csg-teaser">Premium coastal property brand outranked the portals for its priority suburbs.</span>
+          <span class="csg-tags"><span class="csg-tag">Real Estate</span></span>
+        </span>
+        <span class="csg-metricpair">
+          <span class="csg-metric"><span class="csg-fig">+38</span><span class="csg-cap">Clients</span></span>
+          <span class="csg-metric"><span class="csg-fig">+212%</span><span class="csg-cap">Revenue</span></span>
+        </span>
+        <span class="csg-explore">Explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </button>
+
+      <!-- Card 2 — Finance & Consulting -->
+      <button type="button" class="csg-card reveal"
+        data-name="Northbridge Advisory"
+        data-md="Marcus Devlin"
+        data-mdinit="MD"
+        data-mdrole="Managing Director, Northbridge Advisory"
+        data-industries="Finance & Consulting"
+        data-clients="+26"
+        data-revenue="+164%"
+        data-desc="A boutique advisory firm relied almost entirely on word of mouth, with no organic presence for the high-value service terms its ideal clients searched. We built an authority hub of in-depth service and insight pages, tightened technical SEO and earned credible references from finance publications. Search began delivering a steady stream of decision-makers already aware of the firm's expertise. Cost-per-lead fell sharply while the average engagement value rose.">
+        <span class="csg-id">
+          <span class="csg-av">MD</span>
+          <span class="csg-role">Managing Director</span>
+        </span>
+        <span class="csg-main">
+          <span class="csg-name">Northbridge Advisory</span>
+          <span class="csg-teaser">A referral-only advisory firm built a search pipeline of qualified decision-makers.</span>
+          <span class="csg-tags"><span class="csg-tag">Finance &amp; Consulting</span></span>
+        </span>
+        <span class="csg-metricpair">
+          <span class="csg-metric"><span class="csg-fig">+26</span><span class="csg-cap">Clients</span></span>
+          <span class="csg-metric"><span class="csg-fig">+164%</span><span class="csg-cap">Revenue</span></span>
+        </span>
+        <span class="csg-explore">Explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </button>
+
+      <!-- Card 3 — Healthcare -->
+      <button type="button" class="csg-card reveal"
+        data-name="Lumière Clinic"
+        data-md="Dr. Sophia Nair"
+        data-mdinit="SN"
+        data-mdrole="Managing Director, Lumière Clinic"
+        data-industries="Healthcare"
+        data-clients="+54"
+        data-revenue="+188%"
+        data-desc="A private clinic was losing local patients to larger groups that dominated the map pack and treatment searches. We aligned the Google Business Profile, fixed name-address-phone consistency across the web and built trustworthy, well-structured treatment pages with proper medical schema. The clinic climbed into the local three-pack for its core treatments and saw a steady rise in booked consultations. New patients now arrive pre-qualified and ready to commit.">
+        <span class="csg-id">
+          <span class="csg-av">SN</span>
+          <span class="csg-role">Managing Director</span>
+        </span>
+        <span class="csg-main">
+          <span class="csg-name">Lumière Clinic</span>
+          <span class="csg-teaser">A private clinic broke into the local map pack for its core treatments.</span>
+          <span class="csg-tags"><span class="csg-tag">Healthcare</span></span>
+        </span>
+        <span class="csg-metricpair">
+          <span class="csg-metric"><span class="csg-fig">+54</span><span class="csg-cap">Patients</span></span>
+          <span class="csg-metric"><span class="csg-fig">+188%</span><span class="csg-cap">Revenue</span></span>
+        </span>
+        <span class="csg-explore">Explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </button>
+
+      <!-- Card 4 — Home & Trades -->
+      <button type="button" class="csg-card reveal"
+        data-name="Apex Roofing"
+        data-md="Tom Castellano"
+        data-mdinit="TC"
+        data-mdrole="Managing Director, Apex Roofing"
+        data-industries="Home &amp; Trades"
+        data-clients="+41"
+        data-revenue="+205%"
+        data-desc="A regional roofing company depended on paid ads and a few directories, with little organic visibility across the towns it served. We produced location-specific service pages, sharpened local SEO signals and built a review and citation programme that search engines trust. Organic enquiries grew month over month and the business reduced its reliance on expensive paid clicks. The team now fields higher-quality jobs from people actively searching for the work.">
+        <span class="csg-id">
+          <span class="csg-av">TC</span>
+          <span class="csg-role">Managing Director</span>
+        </span>
+        <span class="csg-main">
+          <span class="csg-name">Apex Roofing</span>
+          <span class="csg-teaser">A regional roofer cut paid spend and grew organic jobs across every town it serves.</span>
+          <span class="csg-tags"><span class="csg-tag">Home &amp; Trades</span></span>
+        </span>
+        <span class="csg-metricpair">
+          <span class="csg-metric"><span class="csg-fig">+41</span><span class="csg-cap">Clients</span></span>
+          <span class="csg-metric"><span class="csg-fig">+205%</span><span class="csg-cap">Revenue</span></span>
+        </span>
+        <span class="csg-explore">Explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </button>
+
+      <!-- Card 5 — Insurance & Cyber -->
+      <button type="button" class="csg-card reveal"
+        data-name="Sentinel Cyber"
+        data-md="Priya Ramanathan"
+        data-mdinit="PR"
+        data-mdrole="Managing Director, Sentinel Cyber"
+        data-industries="Insurance &amp; Cyber"
+        data-clients="+33"
+        data-revenue="+178%"
+        data-desc="A cyber-insurance specialist competed against established carriers for some of the most expensive terms in search. We built a topical content engine around risk, compliance and cover, paired it with strong technical foundations and earned authoritative references in the security space. The brand began ranking for high-intent commercial queries and attracting businesses already evaluating cover. Inbound demos grew while acquisition cost steadily came down.">
+        <span class="csg-id">
+          <span class="csg-av">PR</span>
+          <span class="csg-role">Managing Director</span>
+        </span>
+        <span class="csg-main">
+          <span class="csg-name">Sentinel Cyber</span>
+          <span class="csg-teaser">A cyber-insurance specialist won high-intent commercial searches against the big carriers.</span>
+          <span class="csg-tags"><span class="csg-tag">Insurance &amp; Cyber</span></span>
+        </span>
+        <span class="csg-metricpair">
+          <span class="csg-metric"><span class="csg-fig">+33</span><span class="csg-cap">Clients</span></span>
+          <span class="csg-metric"><span class="csg-fig">+178%</span><span class="csg-cap">Revenue</span></span>
+        </span>
+        <span class="csg-explore">Explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Single reusable modal -->
+  <div class="csg-modal" id="csg-modal" role="dialog" aria-modal="true" aria-labelledby="csg-modal-bizname" hidden>
+    <div class="csg-backdrop" data-csg-dismiss></div>
+    <div class="csg-dialog" role="document">
+      <button type="button" class="csg-close" data-csg-dismiss aria-label="Close case study">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="csg-modal-head">
+        <div class="csg-modal-av" id="csg-modal-av">EH</div>
+        <div>
+          <p class="csg-modal-md" id="csg-modal-md">Eliza Hartwell</p>
+          <p class="csg-modal-mdrole" id="csg-modal-mdrole">Managing Director, Coastal Estates</p>
+        </div>
+      </div>
+
+      <div class="csg-modal-biz">
+        <h3 class="csg-modal-bizname" id="csg-modal-bizname">Coastal Estates</h3>
+        <div class="csg-modal-tags" id="csg-modal-tags"></div>
+      </div>
+
+      <div class="csg-metrics">
+        <div class="csg-metric">
+          <span class="csg-fig" id="csg-modal-clients">+38</span>
+          <span class="csg-cap">Additional clients</span>
+        </div>
+        <div class="csg-metric">
+          <span class="csg-fig" id="csg-modal-revenue">+212%</span>
+          <span class="csg-cap">Revenue growth</span>
+        </div>
+      </div>
+
+      <p class="csg-modal-desc" id="csg-modal-desc"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS (Section 5) ============ -->
+<section id="reviews" class="section-pad grev-section" data-navtheme="light">
+  <div class="wrap">
+
+    <div class="shead reveal">
+      <p class="label"><span class="rule-gold"></span> 05 — Reviews</p>
+      <h2 class="disp">Rated 5.0 on Google.</h2>
+      <p class="sub">The unedited word of the people we build for — straight from our public profile.</p>
+    </div>
+
+    <!-- Aggregate badge -->
+    <div class="grev-agg reveal">
+      <div class="grev-agg-top">
+        <svg class="grev-glogo" viewBox="0 0 48 48" aria-label="Google" role="img">
+          <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+          <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+          <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34A21.99 21.99 0 0 0 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
+          <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+        </svg>
+        <span class="grev-figure">5.0</span>
+        <span class="grev-agg-stars" aria-label="5 out of 5 stars">
+          <svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg>
+        </span>
+      </div>
+      <p class="grev-agg-meta">from 102 Google reviews · Digital Movement Australia</p>
+      <a class="grev-agg-link" href="https://www.google.com/search?q=Digital+Movement+Australia+reviews" target="_blank" rel="noopener">Read them on Google →</a>
+    </div>
+
+    <!-- Review wall -->
+    <div class="grev-wall reveal">
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Great quality service, proactive and positive, easy to deal with, and outcomes as promised. Highly recommend Stuart and the team, and grateful for their work so far.</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">J</span><div class="grev-who-text"><div class="grev-name">Jessica Purcell</div><div class="grev-date">4 months ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Stuart, Dean and the crew have been excellent in creating a complete redesign of a new website for my business and managing Google advertising and SEO work with great results quite…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">M</span><div class="grev-who-text"><div class="grev-name">Matthew Kang</div><div class="grev-date">11 months ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Digital Movement have been amazing to work with. Dean and the team built me a great website and set up SEO and Google Ads and I started getting real leads not long after. The team is…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">B</span><div class="grev-who-text"><div class="grev-name">Beth Sorensen</div><div class="grev-date">10 months ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Punctual organise efficient is just a few of the best quality. I have been dealing with this company for years now and I couldn’t recommend a better social media marketing agency. Not…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">F</span><div class="grev-who-text"><div class="grev-name">Fabienne M</div><div class="grev-date">9 months ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Marty and the team have been absolutely awesome! They set up my website and are currently working on my Google Ads and SEO. They’re always quick to respond to any questions or concerns…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">R</span><div class="grev-who-text"><div class="grev-name">Ricky Sharpe</div><div class="grev-date">a year ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">We’ve used Digital Movement to over 10 now and we highly recommend, We noticed a great uptick from the start.</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">D</span><div class="grev-who-text"><div class="grev-name">Damian Talbot</div><div class="grev-date">a month ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">The team at Digital Movement has been absolutely fantastic in creating my shiny new website for Willow Branch Photography, and I couldn't be happier with the redesign and development!…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">M</span><div class="grev-who-text"><div class="grev-name">Malin Burnand</div><div class="grev-date">a year ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Stuart is incredibly professional with attention to detail, clear communication and understanding of my goals. The creativity, copy and design technique of the ads are visually…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">M</span><div class="grev-who-text"><div class="grev-name">mel sweeney</div><div class="grev-date">a year ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">From our initial conversation with Stuart I knew this was the company for us. He was honest, passionate and thorough. Nothing was too much trouble and he stepped us through the process…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">C</span><div class="grev-who-text"><div class="grev-name">Clarity Essential Wellness</div><div class="grev-date">a year ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">I can’t recommend Digital Movement enough for their incredible SEO services! As the owner of a small online store, I was struggling to attract consistent traffic and generate sales.…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">A</span><div class="grev-who-text"><div class="grev-name">Andrew Schultz</div><div class="grev-date">a year ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">I can't say enough about the website design services provided by Digital Movement. They took the time to understand my business needs and translated them into a beautiful website. The…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">B</span><div class="grev-who-text"><div class="grev-name">Beatrice King</div><div class="grev-date">2 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Digital Movement has been an invaluable partner for our business. Their expertise in SEO and Google Ads has helped us to increase our online visibility and attract more customers. We…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">L</span><div class="grev-who-text"><div class="grev-name">Lauren Robinson</div><div class="grev-date">3 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">So far I cannot fault this company at all. They have been absolutely fantastic to work with. I’ve been blessed with Martey and May who have done an amazing job. My website has been…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">J</span><div class="grev-who-text"><div class="grev-name">Jess Arroyo (Weigh Less with Jess)</div><div class="grev-date">a year ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Digital Movement made updating out website so easy. They helped us to create our new website with no fuss. We even decided to completely change our wording after a draft was finished…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">J</span><div class="grev-who-text"><div class="grev-name">Jay Gibson</div><div class="grev-date">5 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Digital Movement manages SEO and Google Ads for auswoodcare.com.au - our start-up e-commerce business which sells timber care and maintenance products in Australia. We're very happy…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">L</span><div class="grev-who-text"><div class="grev-name">Lindsay Stoneham</div><div class="grev-date">2 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Stuart and Dean have been very helpful in the launch of Horizon Australia Cleaning which is my new cleaning business. The leads generated so far have been good quality and I am already…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">S</span><div class="grev-who-text"><div class="grev-name">Savoir Clean</div><div class="grev-date">2 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Digital Movement's SEO services have made a huge difference for my business. They really know what they're doing when it comes to improving my website's visibility in search results.…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">P</span><div class="grev-who-text"><div class="grev-name">Peggy</div><div class="grev-date">2 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">I would like to say that the whole team at digital movement have done an outstanding job from start to finish designing and developing the website for my new business. The…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">A</span><div class="grev-who-text"><div class="grev-name">Aleksandra Thomas</div><div class="grev-date">4 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">We have recently used Digital movement to build our new website, switching from another provider. We have found Stuart has been more then helpful and made the process as easy/stress…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">K</span><div class="grev-who-text"><div class="grev-name">Kurt Styles</div><div class="grev-date">4 years ago</div></div></div>
+      </article>
+
+      <article class="grev-card">
+        <span class="grev-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg><svg viewBox="0 0 24 24" fill="#F5A623" aria-hidden="true"><path d="M12 2l2.9 6.26L21.5 9.2l-4.75 4.64 1.12 6.56L12 17.27 6.13 20.4l1.12-6.56L2.5 9.2l6.6-.94L12 2z"/></svg></span>
+        <p class="grev-quote">Martey at digital movement was outstanding. I couldn't be more pleased with the service and content he developed with our website. Martey did his homework and totally understood my…</p>
+        <div class="grev-who"><span class="grev-av" aria-hidden="true">S</span><div class="grev-who-text"><div class="grev-name">sharon kennett</div><div class="grev-date">5 years ago</div></div></div>
+      </article>
+
+    </div>
+
+    <div class="grev-cta-row reveal">
+      <a class="grev-cta" href="https://www.google.com/search?q=Digital+Movement+Australia+reviews" target="_blank" rel="noopener">
+        See all 102 reviews
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ CONTACT (Section 6) ============ -->
+<section id="contact" class="section-pad enquire" data-navtheme="light">
+  <div class="wrap">
+    <div class="shead reveal">
+      <p class="label"><span class="rule-gold"></span> 06 — Contact</p>
+    </div>
+    <div class="enquire-grid">
+      <div class="reveal">
+        <h2>Let&rsquo;s talk.</h2>
+        <p class="sub">Tell us where you want to grow. We reply within one working day.</p>
+        <div class="contacts">
+          <a href="mailto:office@digitalmovement.uk"><span class="k">Email</span><span class="v">office@digitalmovement.uk</span></a>
+          <a href="tel:+442038157992"><span class="k">Call</span><span class="v">0203 815 7992</span></a>
+          <a href="https://wa.me/442038157992" target="_blank" rel="noopener"><span class="k">WhatsApp</span><span class="v">Message us</span></a>
+          <span><span class="k">Studios</span><span class="v">London · Auckland · Berlin · Melbourne</span></span>
+        </div>
+      </div>
+      <form class="eform reveal" id="enquireForm" novalidate>
+        <div class="field"><label for="ename">Full name</label><input id="ename" name="name" type="text" autocomplete="name" placeholder="Your name" /></div>
+        <div class="field"><label for="e">Email</label><input id="e" name="email" type="email" autocomplete="email" placeholder="you@company.com" required /></div>
+        <div class="field"><label for="ephone">Phone</label><input id="ephone" name="phone" type="tel" autocomplete="tel" placeholder="Optional" /></div>
+        <div class="field"><label for="emsg">How can we help?</label><textarea id="emsg" name="message" rows="4" placeholder="A sentence on what you want to grow"></textarea></div>
+        <button type="submit" class="submit">Send enquiry <span class="arr">→</span></button>
+        <p class="privacy" id="enquirePrivacy">By sending, you agree we may contact you about your enquiry. No spam, ever.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== FOOTER ===================== -->
 <footer data-navtheme="dark">
   <div class="wrap">
@@ -1096,7 +2243,7 @@ footer .wrap{ display:block; }
       <div>
         <span class="label">Index</span>
         <a href="#top">Top</a>
-        <a href="#work">Selected work</a>
+        <a href="#work">Web Design Showroom</a>
         <a href="https://wa.me/442038157992" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <div>
@@ -1216,6 +2363,7 @@ footer .wrap{ display:block; }
     if(h1){ h1.classList.add('show'); }             // headline stays white over the carousel
     revealVideoHero();
     document.body.classList.remove('intro-lock');
+    pinTop(); requestAnimationFrame(pinTop);   // unlocking overflow must never reveal a browser-restored scroll
     setTimeout(function(){
       intro.classList.add('gone');
       if(h1){ h1.classList.add('rest'); }           // drop the elevated stacking once the clip is gone
@@ -1227,6 +2375,7 @@ footer .wrap{ display:block; }
   if(prefersReduced || isMobile || !intro){
     // mobile / reduced-motion: skip the sign-post clip → straight to the carousel + tabs
     document.body.classList.remove('intro-lock');
+    pinTop(); requestAnimationFrame(pinTop);
     if(intro){ intro.classList.add('done','gone'); }
     if(introVideo){ try{ introVideo.pause(); }catch(e){} }
     if(h1){ h1.classList.add('show','rest'); }
@@ -1245,8 +2394,7 @@ footer .wrap{ display:block; }
     var navOn = y > 96 && !document.body.classList.contains('intro-lock');
     nav.classList.toggle('scrolled', navOn);
     document.body.classList.toggle('scrolled', y > 24);
-    nav.classList.toggle('nav--light', navOn);   /* white ice-glass bar (every section is dark) */
-    nav.classList.remove('nav--dark');
+    /* nav theme (nav--dark / nav--light) is owned by the pill-nav scrollspy IIFE */
     var h = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
   }
@@ -1621,6 +2769,301 @@ footer .wrap{ display:block; }
   });
   manage();
   setTimeout(function(){ manage(); refitAll(); updateRail(); }, 400);
+})();
+</script>
+
+<script>
+/* ============ SHOWROOM SECTIONS — pill nav + case-study modal + video testimonials ============ */
+/* ---- pill nav: scrollspy active state + nav theme switching ---- */
+/* ===== PILL NAV (pnav-) — scrollspy active state + nav theme switching ===== */
+(function(){
+  var nav = document.getElementById('nav');
+  var pnav = document.querySelector('[data-pnav]');
+  if(!nav || !pnav) return;
+
+  var pills = Array.prototype.slice.call(pnav.querySelectorAll('.pnav-pill'));
+  if(!pills.length) return;
+
+  // Sticky bar height used as the scroll offset
+  var BAR = 64;
+
+  // Sections that drive theme + scrollspy, in document order.
+  // #top = hero (no pill). Footer optional.
+  var SPEC = [
+    { id:'top',          theme:'dark'  },
+    { id:'whatwedo',     theme:'light' },
+    { id:'success',      theme:'light' },
+    { id:'work',         theme:'dark'  },
+    { id:'testimonials', theme:'light' },
+    { id:'case-studies', theme:'light' },
+    { id:'reviews',      theme:'light' },
+    { id:'contact',      theme:'light' }
+  ];
+
+  // Resolve sections that actually exist on the page.
+  var sections = [];
+  SPEC.forEach(function(s){
+    var el = document.getElementById(s.id);
+    if(el) sections.push({ id:s.id, el:el, theme:s.theme });
+  });
+  // Footer (theme follows last light section if present)
+  var footEl = document.querySelector('footer');
+  if(footEl){
+    sections.push({ id:'__footer', el:footEl, theme:'light' });
+  }
+  if(!sections.length) return;
+
+  // Map pill -> section id (pills point at #work/#case-studies/#testimonials/#reviews)
+  function pillForId(id){
+    for(var i=0;i<pills.length;i++){
+      var t = pills[i].getAttribute('data-pnav-target');
+      if(t === '#' + id) return pills[i];
+    }
+    return null;
+  }
+
+  var lastActive = null;
+  function setActive(activePill){
+    pills.forEach(function(p){
+      var on = (p === activePill);
+      p.classList.toggle('is-active', on);
+      if(on){ p.setAttribute('aria-current','true'); }
+      else  { p.removeAttribute('aria-current'); }
+    });
+    /* keep the active pill in view inside the scrollable mobile strip */
+    if(activePill && activePill !== lastActive && pnav.scrollWidth > pnav.clientWidth + 4){
+      try{ activePill.scrollIntoView({ inline:'center', block:'nearest', behavior:'smooth' }); }catch(e){}
+    }
+    lastActive = activePill;
+  }
+
+  function setTheme(theme){
+    nav.classList.toggle('nav--dark', theme === 'dark');
+    nav.classList.toggle('nav--light', theme === 'light');
+  }
+
+  function currentSection(){
+    var probe = (window.scrollY || window.pageYOffset || 0) + BAR + 1;
+    var chosen = sections[0];
+    for(var i=0;i<sections.length;i++){
+      var top = sections[i].el.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0);
+      if(probe >= top){ chosen = sections[i]; }
+      else { break; }
+    }
+    return chosen;
+  }
+
+  var ticking = false;
+  function update(){
+    ticking = false;
+    var sec = currentSection();
+    if(!sec) return;
+
+    // Theme: hero defaults to dark; otherwise the section's own theme.
+    setTheme(sec.theme);
+
+    // Active pill: nothing in hero (#top); from #work onward highlight its pill.
+    if(sec.id === 'top'){
+      setActive(null);
+    } else {
+      // footer keeps the last real pill (#reviews) lit
+      var targetId = (sec.id === '__footer') ? 'contact' : sec.id;
+      setActive(pillForId(targetId));
+    }
+  }
+
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+  }
+
+  // Smooth scroll on pill click with sticky-bar offset
+  pills.forEach(function(p){
+    p.addEventListener('click', function(e){
+      var sel = p.getAttribute('data-pnav-target');
+      if(!sel) return;
+      var target = document.querySelector(sel);
+      if(!target) return;
+      e.preventDefault();
+      var y = target.offsetTop - BAR;
+      if(y < 0) y = 0;
+      window.scrollTo({ top:y, behavior:'smooth' });
+    });
+  });
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll, { passive:true });
+  update(); // run once on load
+})();
+
+/* ---- SEO case studies: explore modal ---- */
+(function(){
+  var modal = document.getElementById('csg-modal');
+  if(!modal) return;
+  var dialog   = modal.querySelector('.csg-dialog');
+  var avEl     = document.getElementById('csg-modal-av');
+  var mdEl     = document.getElementById('csg-modal-md');
+  var mdRoleEl = document.getElementById('csg-modal-mdrole');
+  var bizEl    = document.getElementById('csg-modal-bizname');
+  var tagsEl   = document.getElementById('csg-modal-tags');
+  var cliEl    = document.getElementById('csg-modal-clients');
+  var revEl    = document.getElementById('csg-modal-revenue');
+  var descEl   = document.getElementById('csg-modal-desc');
+  var closeBtn = modal.querySelector('.csg-close');
+  var cards    = Array.prototype.slice.call(document.querySelectorAll('.csg-card'));
+  var lastTrigger = null;
+
+  function populate(card){
+    if(avEl)     avEl.textContent     = card.getAttribute('data-mdinit') || '';
+    if(mdEl)     mdEl.textContent     = card.getAttribute('data-md') || '';
+    if(mdRoleEl) mdRoleEl.textContent = card.getAttribute('data-mdrole') || '';
+    if(bizEl)    bizEl.textContent    = card.getAttribute('data-name') || '';
+    if(cliEl)    cliEl.textContent    = card.getAttribute('data-clients') || '';
+    if(revEl)    revEl.textContent    = card.getAttribute('data-revenue') || '';
+    if(descEl)   descEl.textContent   = card.getAttribute('data-desc') || '';
+    if(tagsEl){
+      tagsEl.innerHTML = '';
+      var inds = (card.getAttribute('data-industries') || '').split(',');
+      inds.forEach(function(t){
+        t = t.trim(); if(!t) return;
+        var span = document.createElement('span');
+        span.className = 'csg-tag';
+        span.textContent = t;
+        tagsEl.appendChild(span);
+      });
+    }
+  }
+
+  function open(card){
+    lastTrigger = card;
+    populate(card);
+    modal.hidden = false;
+    /* force reflow so transition fires */
+    void modal.offsetWidth;
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    if(closeBtn) closeBtn.focus();
+  }
+
+  function close(){
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    var done = function(){
+      modal.hidden = true;
+      modal.removeEventListener('transitionend', done);
+    };
+    modal.addEventListener('transitionend', done);
+    setTimeout(function(){ if(!modal.classList.contains('is-open')){ modal.hidden = true; } }, 500); /* reduced-motion / no-transition fallback */
+    if(lastTrigger){ lastTrigger.focus(); lastTrigger = null; }
+  }
+
+  cards.forEach(function(card){
+    card.addEventListener('click', function(){ open(card); });
+  });
+
+  modal.addEventListener('click', function(e){
+    if(e.target && e.target.hasAttribute('data-csg-dismiss')) close();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('is-open')) close();
+  });
+
+  /* basic focus trap inside dialog */
+  modal.addEventListener('keydown', function(e){
+    if(e.key !== 'Tab' || !modal.classList.contains('is-open')) return;
+    var focusables = dialog.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])');
+    if(!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+})();
+
+/* ---- video testimonials: play/pause + radio unmute + carousel ---- */
+(function(){
+  var section = document.getElementById('testimonials');
+  if(!section) return;
+  var track = section.querySelector('[data-vt-track]');
+  if(!track) return;
+  var cards = Array.prototype.slice.call(track.querySelectorAll('.vt-card'));
+  var videos = Array.prototype.slice.call(track.querySelectorAll('[data-vt-video]'));
+  var soundBtns = Array.prototype.slice.call(track.querySelectorAll('[data-vt-sound]'));
+  var prevBtn = section.querySelector('[data-vt-dir="prev"]');
+  var nextBtn = section.querySelector('[data-vt-dir="next"]');
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- IntersectionObserver: play visible, pause off-screen ----
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var v = e.target;
+        if(e.isIntersecting && e.intersectionRatio >= 0.25){
+          if(!reduceMotion){ var p = v.play(); if(p && p.catch){ p.catch(function(){}); } }
+        } else {
+          try{ v.pause(); }catch(err){}
+        }
+      });
+    }, { threshold: [0, 0.25, 0.5] });
+    videos.forEach(function(v){ io.observe(v); });
+  } else if(!reduceMotion){
+    videos.forEach(function(v){ var p=v.play(); if(p&&p.catch){p.catch(function(){});} });
+  }
+
+  // ---- Radio unmute: only one card audible at a time ----
+  function setMuted(idx, muted){
+    var v = videos[idx]; var btn = soundBtns[idx];
+    if(!v || !btn) return;
+    v.muted = muted;
+    btn.classList.toggle('is-on', !muted);
+    btn.setAttribute('aria-pressed', String(!muted));
+    btn.setAttribute('aria-label', muted ? 'Unmute video' : 'Mute video');
+    if(!muted && !reduceMotion){ var p=v.play(); if(p&&p.catch){p.catch(function(){});} }
+  }
+
+  soundBtns.forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var willUnmute = videos[i].muted;
+      // mute all others first
+      videos.forEach(function(_, j){ if(j !== i) setMuted(j, true); });
+      setMuted(i, !willUnmute ? true : false);
+    });
+  });
+
+  // ---- Prev / next scroll by one card width + gap ----
+  function step(){
+    if(!cards.length) return 380;
+    var rect = cards[0].getBoundingClientRect();
+    var styles = window.getComputedStyle(track);
+    var gap = parseFloat(styles.columnGap || styles.gap || '20') || 20;
+    return rect.width + gap;
+  }
+  function scrollByDir(dir){
+    track.scrollBy({ left: dir * step(), behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+  if(prevBtn) prevBtn.addEventListener('click', function(){ scrollByDir(-1); });
+  if(nextBtn) nextBtn.addEventListener('click', function(){ scrollByDir(1); });
+
+  // ---- Disable arrows at edges ----
+  function updateArrows(){
+    if(!prevBtn || !nextBtn) return;
+    var max = track.scrollWidth - track.clientWidth - 2;
+    prevBtn.disabled = track.scrollLeft <= 2;
+    nextBtn.disabled = track.scrollLeft >= max;
+  }
+  track.addEventListener('scroll', updateArrows, { passive:true });
+  window.addEventListener('resize', updateArrows);
+  updateArrows();
+
+  // ---- Keyboard arrow nav when track focused/hovered ----
+  track.setAttribute('tabindex', '0');
+  track.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight'){ e.preventDefault(); scrollByDir(1); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); scrollByDir(-1); }
+  });
 })();
 </script>
 </body>
