@@ -1394,6 +1394,17 @@ footer .wrap{ display:block; }
   background:var(--bone-2); border:1px solid var(--line); border-radius:999px; padding:10px 19px; }
 .ww-meta{ margin-top:28px; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.18em; font-size:11px; color:var(--ink-faint); }
 @media(max-width:600px){ .ww-services{ gap:8px; } .ww-services li{ font-size:12px; padding:8px 15px; } .ww-meta{ letter-spacing:.12em; } }
+
+/* ===== Co-founders (round avatars in the Let's talk / contact section) ===== */
+.cofounders{ margin-top:36px; }
+.cofounders .label{ margin-bottom:16px; }
+.cf-row{ display:flex; flex-wrap:wrap; gap:26px; }
+.cf{ display:flex; align-items:center; gap:14px; }
+.cf img{ width:66px; height:66px; border-radius:50%; object-fit:cover; flex:0 0 auto;
+  border:1px solid var(--line); box-shadow:0 6px 18px rgba(0,0,0,.10); background:var(--bone-2); }
+.cf-meta strong{ display:block; font-family:"Jost",sans-serif; font-weight:600; font-size:15.5px; letter-spacing:-0.01em; color:var(--ink); }
+.cf-meta span{ display:block; font-family:"Jost",sans-serif; text-transform:uppercase; letter-spacing:0.14em; font-size:11px; color:var(--ink-soft); margin-top:3px; }
+@media(max-width:600px){ .cf-row{ gap:18px; } .cf img{ width:58px; height:58px; } }
 </style>
 </head>
 <body class="intro-lock">
@@ -2218,6 +2229,19 @@ footer .wrap{ display:block; }
           <a href="tel:+442038157992"><span class="k">Call</span><span class="v">0203 815 7992</span></a>
           <a href="https://wa.me/442038157992" target="_blank" rel="noopener"><span class="k">WhatsApp</span><span class="v">Message us</span></a>
           <span><span class="k">Studios</span><span class="v">London · Auckland · Berlin · Melbourne</span></span>
+        </div>
+        <div class="cofounders reveal">
+          <p class="label"><span class="rule-gold"></span> Co-founders</p>
+          <div class="cf-row">
+            <div class="cf">
+              <img src="assets/founders/raoul.jpg" alt="Raoul Müller, Co-Founder of Digital Movement" />
+              <div class="cf-meta"><strong>Raoul Müller</strong><span>Co-Founder</span></div>
+            </div>
+            <div class="cf">
+              <img src="assets/founders/martey.jpg" alt="Martey, Co-Founder of Digital Movement" />
+              <div class="cf-meta"><strong>Martey</strong><span>Co-Founder</span></div>
+            </div>
+          </div>
         </div>
       </div>
       <form class="eform reveal" id="enquireForm" novalidate>
