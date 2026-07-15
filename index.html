@@ -680,6 +680,14 @@ footer .wrap{ display:block; }
   .enquire h2{ text-align:center; }
   .contacts{ align-items:center; }
   .contacts a, .contacts span{ justify-content:center; }
+  /* The final conversation area is intentionally editorial and left aligned. */
+  #contact .shead{ align-items:flex-start; text-align:left; }
+  #contact .shead .label{ justify-content:flex-start; }
+  #contact .enquire-grid, #contact .enquire-grid > div{ text-align:left; }
+  #contact.enquire h2, #contact.enquire .sub{ margin-inline:0; text-align:left; }
+  #contact .contacts{ align-items:stretch; }
+  #contact .contacts a, #contact .contacts span{ justify-content:flex-start; }
+  #contact .cofounders .label, #contact .cf-row{ justify-content:flex-start; }
   .feature-meta{ text-align:center; margin-top:28px; }
   .feature-meta h3, .feature-meta p{ margin-inline:auto; }
   .feature-meta .visit{ margin-inline:auto; }
@@ -786,9 +794,9 @@ footer .wrap{ display:block; }
 @media(max-width:760px){
   html{ /* page scroll-snap removed for the multi-section layout */ }
   .sw-stagehead .sw-nav, .sw-rail{ display:none; }
-  /* whole showroom fits ONE mobile viewport (same as desktop) */
-  .sw-section{ scroll-snap-align:start; scroll-snap-stop:always; height:100svh; padding-block:0; overflow:hidden; }
-  .sw-section > .wrap{ padding-block:54px 8px; }
+  /* Let the real phone-shaped previews keep their full proportions. */
+  .sw-section{ scroll-snap-align:start; scroll-snap-stop:always; min-height:100svh; height:auto; padding-block:0; overflow:hidden; }
+  .sw-section > .wrap{ padding-block:54px 40px; }
   .sw-section .shead{ margin-bottom:5px; }
   .sw-section .shead .disp{ font-size:clamp(26px,8vw,38px); line-height:1.04; margin:3px 0 0; }
   .sw-section .shead .label{ margin:0; }
@@ -798,8 +806,8 @@ footer .wrap{ display:block; }
   /* horizontal swipe slider — one full mobile-proportioned preview + a peek of the next */
   .sw-track{ flex-direction:row; gap:16px; overflow-x:auto; overflow-y:visible; scroll-snap-type:x mandatory; scroll-behavior:smooth; cursor:default; padding:6px 0 10px; margin:0; }
   .sw-card{ width:min(78vw,340px); scroll-snap-align:center; contain-intrinsic-size:auto; content-visibility:visible; }
-  /* website preview in mobile proportions — clean card, no device frame */
-  .sw-media{ position:relative; height:min(calc(100svh - 308px), 600px); width:100%; min-height:0; overflow:hidden; }
+  /* Same 399 × 802 logical phone viewport used in the Benzo proposal. */
+  .sw-media{ position:relative; width:100%; height:auto; aspect-ratio:399/802; min-height:0; overflow:hidden; }
   .sw-media iframe{ position:absolute; inset:0; top:0; left:0; width:100%; height:100%; border-radius:0; }
   .sw-skel{ inset:0; border-radius:0; }
   .sw-foot{ justify-content:center; padding:13px 16px 15px; }
@@ -2565,7 +2573,7 @@ footer .wrap{ display:block; }
     {brand:"NEO THE AGENCY", industry:"agency", tag:"Creative & SEO agency · Berlin", url:"https://www.neotheagency.de"},
     {brand:"Vanguard", industry:"agency", tag:"World-class digital collective", url:"https://digitalmovementuk.github.io/vanguard-hero/"},
     {brand:"Puriva", industry:"health", tag:"Aesthetic & lifestyle clinic · Bali", url:"https://digitalmovementuk.github.io/puriva/homepage/v1/"},
-    {brand:"CX", industry:"finance", tag:"Process & digitalisation consulting", url:"sites/cx/"},
+    {brand:"CEx", industry:"finance", tag:"Process & digitalisation consulting", url:"sites/cx/?v=20260715"},
     {brand:"Re;mind", industry:"health", tag:"Mental health therapies", url:"https://digitalmovementuk.github.io/remind-v2/"},
     {brand:"Digital Movement NZ", industry:"agency", tag:"Performance marketing · New Zealand", url:"https://www.digitalmovement.co.nz"},
     /* tail — animated heroes, trades grouped, static heroes last */
@@ -2619,9 +2627,10 @@ footer .wrap{ display:block; }
     }
   }
 
-  /* ---- desktop = real DESKTOP layout (wide viewport rendered, then scaled to fit the card);
-          mobile = native MOBILE layout (full-width iframe, no scaling) ---- */
+  /* ---- desktop = wide viewport rendered and scaled into the card;
+          mobile = a fixed 399 × 802 phone viewport scaled proportionally ---- */
   var DTOP_W = 1180;                       // logical px width the embedded site renders at on desktop
+  var MOBILE_W = 399, MOBILE_H = 802;      // real phone viewport used by the Benzo proposal
   function isDesktop(){ return window.innerWidth > 760; }
   function fitFrame(f){
     var media = f.parentNode; if(!media) return;
@@ -2633,8 +2642,14 @@ footer .wrap{ display:block; }
       f.style.height = Math.ceil(H / sc) + 'px';
       f.style.transform = 'scale(' + sc + ')';
     } else {
-      /* mobile: the iPhone-screen sizing is controlled by CSS (iframe inset inside the device frame) */
-      f.style.width=''; f.style.height=''; f.style.top=''; f.style.left=''; f.style.transform='none';
+      /* Render at a real phone viewport, then scale the complete phone screen into the card. */
+      var MW = media.clientWidth;
+      if(!MW) return;
+      var msc = MW / MOBILE_W;
+      f.style.width = MOBILE_W + 'px';
+      f.style.height = MOBILE_H + 'px';
+      f.style.top = '0'; f.style.left = '0';
+      f.style.transform = 'scale(' + msc + ')';
     }
   }
   function refitAll(){ cards.forEach(function(c){ var f=c.querySelector('iframe'); if(f) fitFrame(f); }); }
@@ -2668,7 +2683,16 @@ footer .wrap{ display:block; }
               d.documentElement.style.overflow='auto'; if(d.body) d.body.style.overflow='auto';
             }catch(_){}
           };
-          killPopups(); setTimeout(killPopups,800); setTimeout(killPopups,2400);
+          var resetPreviewScroll=function(){
+            try{
+              f.contentWindow.scrollTo(0,0);
+              if(d.scrollingElement)d.scrollingElement.scrollTop=0;
+              if(d.body)d.body.scrollTop=0;
+            }catch(_){}
+          };
+          killPopups(); resetPreviewScroll();
+          setTimeout(function(){killPopups();resetPreviewScroll()},800);
+          setTimeout(killPopups,2400);
           /* AEXIS: keep the preview on the landing page — disable navigation away via menu links */
           if(src.indexOf('aexis')>-1){
             d.addEventListener('click', function(e){ var a=e.target.closest&&e.target.closest('a'); if(a){ var h=a.getAttribute('href')||''; if(h && h.charAt(0)!=='#'){ e.preventDefault(); e.stopPropagation(); } } }, true);
